@@ -1,8 +1,10 @@
 //练习一下欧拉线性筛质数
 #include<stdio.h>
 #define N 1000000+3
+
 int n,i,j;
 int pri[N],pn[N/10];
+
 int main(){
 	for(i=2;i<N;i++){
 		if(!pri[i]) pn[++pn[0]]=i;
