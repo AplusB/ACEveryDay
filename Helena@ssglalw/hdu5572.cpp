@@ -129,9 +129,13 @@ int main()
 				//printf("B1 (%lf, %lf)\n", B1.x, B1.y);
 				if(A==A1 && onSeg(C, B, A))
 					ans = 1;
-				else if(onSeg(C, B, A1))
-					ans = 1;
+				else {
+					Vec u = B - C;
+					Vec v = A1 - C;
+					if(u.unit() == v.unit())
+						ans = 1;
 				else ans = 0;
+				}
 			}
 		}else{//运动方向不变，则AB与V同向才可碰到B
 			//printf("no intersection\n");
