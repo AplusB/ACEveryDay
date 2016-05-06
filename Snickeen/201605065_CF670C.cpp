@@ -16,9 +16,7 @@ struct TT{
 };TT tt[200011],ss[200011];
 int ff,n,m,i,j,k,l,t,s,r,mmax,mmin,num,ans;
 LL MOD=1e9+7;
-
 int cmp3(TT a,TT b){return a.a<b.a;}
-
 int bs( int e,int begin, int end)  
 {  
     int mid,left=begin,right=end;  
