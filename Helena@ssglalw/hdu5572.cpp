@@ -81,6 +81,7 @@ Vec project(Vec& v1, Vec& v2, Vec& p){
 //点p关于直线v1,v2的对称点
 Vec mirrorPoint(Vec& v1, Vec& v2, Vec& p){
 	Vec c = project(v1, v2, p);
+	//printf("project: %lf, %lf\n", c.x, c.y);
 	return (double)2*c - p;
 }
 
@@ -123,18 +124,25 @@ int main()
 			if(onSeg(A, C, B)) ans = 1;
 			else{
 				//printf("has intersection (%lf, %lf)\n", C.x, C.y);
-				B1 = mirrorPoint(O, C, B);
 				Vec A1 = mirrorPoint(O, C, A);
-
+				  // printf("A: %lf, %lf\n", A.x, A.y);
+				  // printf("A1: %lf, %lf\n", A1.x, A1.y);
 				//printf("B1 (%lf, %lf)\n", B1.x, B1.y);
-				if(A==A1 && onSeg(C, B, A))
-					ans = 1;
-				else {
+				if(A==A1){
+					Vec u = B - O;
+					Vec v = C - O;
+					// printf("OB: %lf %lf\n", u.unit().x, u.unit().y);
+					// printf("OC: %lf %lf\n", v.unit().x, v.unit().y);
+					if(u.unit() == v.unit()){
+						ans = 1;
+					}else ans = 0;
+				}else {
 					Vec u = B - C;
 					Vec v = A1 - C;
-					if(u.unit() == v.unit())
+					if(u.unit() == v.unit()){
 						ans = 1;
-				else ans = 0;
+					}
+					else ans = 0;
 				}
 			}
 		}else{//运动方向不变，则AB与V同向才可碰到B
