@@ -49,7 +49,7 @@ int main()
     }
     std::string tmp = ret;
 
-    //小于等于t[0]的数放前面
+    //等于t[0]的数放前面
     for(int i = 0; i <= t[0]-'0'; i++) {
         PushBackAll(i);
     }
@@ -59,7 +59,7 @@ int main()
     }
     candidates.push_back(ret);
 
-    //小于等于t[0]的数放后面
+    //等于t[0]的数放后面
     ret = tmp;
     for(int i = 0; i < t[0]-'0'; i++) {
         PushBackAll(i);
