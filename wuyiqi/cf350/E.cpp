@@ -1,89 +1,45 @@
 #include <bits/stdc++.h>
-using namespace std;
 
 const int N = 500010;
-char s[N];
-struct Node
-{
-    Node *pre, *nxt;
-    char ch;
-    int i;
-    Node () {
-        pre = nxt = NULL;
-    }
-};
-char op[N];
+char s[N], op[N];
 int main()
 {
     int n, m, p;
     scanf("%d%d%d", &n, &m, &p);
-
-    scanf("%s", s+1);
-    Node *now = new Node();
-    Node *head = now;
-    for(int i = 1; s[i]; i++) {
-        Node *tmp = new Node();
-        tmp->i = i;
-        tmp->ch = s[i];
-        now->nxt = tmp;
-        tmp->pre = now;
-        now = now->nxt;
+    scanf("%s", s);
+    std::list<char> list;
+    for(int i = 0; s[i]; i++) {
+        list.push_back(s[i]);
     }
-    Node *pt = head;
-    for(int i = 0; i < p; i++) {
-        pt = pt->nxt;
-    }
+    auto it = list.begin();
+    for(int i = 1; i < p; i++) it++;
     scanf("%s", op);
     for(int i = 0; op[i]; i++) {
         if(op[i] == 'L') {
-            pt = pt->pre;
-        } else if(op[i] == 'R') {
-            pt = pt->nxt;
+            --it;
+        } else if(op[i] == 'R'){
+            ++it;
         } else {
-            if(pt->ch == ')') {
-                stack<char> stk;
-                stk.push(')');
-                Node *now = pt->nxt;
-                while(!stk.empty()) {
-                    pt = pt->pre;
-                    if(pt->ch != stk.top()) {
-                        stk.pop();
-                    } else {
-                        stk.push(pt->ch);
-                    }
+            if(*it == '(') {
+                it = list.erase(it);
+                int cnt = 1;
+                while(cnt > 0) {
+                    cnt += (*it == '(') * 2 - 1;
+                    it = list.erase(it);
                 }
-                pt = pt->pre;
-                pt->nxt = now;
-                if(now != NULL) {
-                    now->pre = pt;
-                    pt = now;
-                }  
             } else {
-                stack<char> stk;
-                stk.push('(');
-                Node *now = pt->pre;
-                while(!stk.empty()) {
-                    pt = pt->nxt;
-                    if(pt->ch != stk.top()) {
-                        stk.pop();
-                    } else {
-                        stk.push(pt->ch);
-                    }
-                }
-                pt = pt->nxt;
-                now->nxt = pt;
-                if(pt != NULL) {
-                    pt->pre = now;
-                } else {
-                    pt = now;
+                it = list.erase(it);
+                int cnt = 1;
+                while(cnt > 0) {
+                    cnt += (*--it == ')') * 2 - 1;
+                    it = list.erase(it);
                 }
             }
+            if(it == list.end()) --it;
         }
     }
-    while(head->nxt) {
-        head = head->nxt;
-        printf("%c", head->ch);
-    }
+    for(auto it : list) 
+        putchar(it);
     puts("");
     return 0;
 }

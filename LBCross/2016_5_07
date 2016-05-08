@@ -1,0 +1,74 @@
+/*
+博客链接：
+http://blog.csdn.net/libin66/article/details/51337560
+*/
+#include<iostream>
+#include<cstdio>
+#include<cstring>
+#include<algorithm>
+#include<string>
+#include<vector>
+#include <ctime>
+#include<queue>
+#include<set>
+#include<map>
+#include<stack>
+#include<iomanip>
+#include<cmath>
+#define mst(ss,b) memset((ss),(b),sizeof(ss))
+#define maxn 0x3f3f3f3f
+#define MAX 1000100
+///#pragma comment(linker, "/STACK:102400000,102400000")
+typedef long long ll;
+typedef unsigned long long ull;
+#define INF (1ll<<60)-1
+using namespace std;
+int n,m,now;
+char s[500100],p[500100];
+stack<int> sta;
+int a[500100];
+struct node{
+    int l,r;
+}L[500100];
+int main(){
+    scanf("%d%d%d%s%s",&n,&m,&now,s+1,p+1);
+    for(int i=1;i<=n;i++){
+        if(s[i]=='(') sta.push(i);
+        else {
+            a[i]=sta.top();
+            a[sta.top()]=i;
+            sta.pop();
+        }
+    }
+    for(int i=1;i<=n;i++){
+        L[i].l=i-1;
+        L[i].r=i+1;
+    }
+    L[n].r=0;
+    for(int i=1;i<=m;i++){
+        if(p[i]=='R') now=L[now].r;
+        else if(p[i]=='L') now=L[now].l;
+        else {
+            if(s[now]=='('){
+                int x=now;
+                int y=a[now];
+                now=L[y].r;
+                if(now==0) now=L[x].l;
+                L[L[x].l].r=L[y].r;
+                L[L[y].r].l=L[x].l;
+            } else {
+                int x=a[now];
+                int y=now;
+                now=L[y].r;
+                if(now==0) now=L[x].l;
+                L[L[x].l].r=L[y].r;
+                L[L[y].r].l=L[x].l;
+            }
+        }
+    }
+    ///for(int i=1;i<=n;i++) cout<<L[i].l<<" "<<L[i].r<<endl;
+    while(L[now].l!=0) now=L[now].l;
+    for(int i=now;i!=0;i=L[i].r) printf("%c",s[i]);
+    cout<<endl;
+    return 0;
+}
