@@ -12,5 +12,5 @@ int main(){
     for(i=n;i;i--)if(i!=a&&i!=b&&i!=c&&i!=d)printf("%d ",i);
     printf("%d %d\n",b,d);
     
-	return 0;
+    return 0;
 }
