@@ -1,0 +1,124 @@
+
+#include<cstdio>
+#include<cstring>
+#include<iostream>
+#include<sstream>
+#include<algorithm>
+#include<vector>
+#include<bitset>
+#include<set>
+#include<queue>
+#include<stack>
+#include<map>
+#include<cstdlib>
+#include<cmath>
+#define PI 2*asin(1.0)
+#define LL long long
+#define pb push_back
+#define pa pair<int,int>
+#define clr(a,b) memset(a,b,sizeof(a))
+#define lson lr<<1,l,mid
+#define rson lr<<1|1,mid+1,r
+#define bug(x) printf("%d++++++++++++++++++++%d\n",x,x)
+#define key_value ch[ch[root][1]][0]C:\Program Files\Git\bin
+const LL  MOD = 1E9+7;
+const LL N = 1e5+15;
+const int maxn = 5e5+15;
+const int letter = 130;
+const int INF = 1e17;
+const double pi=acos(-1.0);
+const double eps=1e-10;
+using namespace std;
+inline int read()
+{
+    int x=0,f=1;char ch=getchar();
+    while(ch<'0'||ch>'9'){if(ch=='-')f=-1;ch=getchar();}
+    while(ch>='0'&&ch<='9'){x=x*10+ch-'0';ch=getchar();}
+    return x*f;
+}
+int n;
+char s[N],w[N];
+LL mpow(LL a,LL k){
+    LL ans=1;
+    while(k){
+        if(k&1) ans=ans*a%MOD;
+        a=a*a%MOD;
+        k=k/2;
+    }
+    return ans;
+}
+int main(){
+    scanf("%d%s%s",&n,s,w);
+    int flag1=0,flag2=0;
+    LL num=0;
+    for(int i=0;i<n;i++){
+        if(s[i]!='?'&&w[i]!='?'){
+            if(s[i]>w[i]) flag1=1;
+            if(s[i]<w[i]) flag2=1;
+        }
+        if(s[i]=='?')num++;
+        if(w[i]=='?')num++;
+    }
+    LL sum=mpow(10,num);
+    if(flag1+flag2==2);
+    else if(flag1==1){
+        LL ans=1;
+        for(int i=0;i<n;i++){
+            if(s[i]=='?'||w[i]=='?'){
+                if(s[i]=='?'&&w[i]=='?') ans=ans*1ll*55%MOD;
+                else if(s[i]=='?') ans=ans*1ll*(10-w[i]+'0')%MOD;
+                else ans=ans*1ll*(s[i]-'0'+1)%MOD;
+            }
+        }
+        sum=sum-ans;
+    }
+    else if(flag2==1){
+        LL ans=1;
+        for(int i=0;i<n;i++){
+            if(s[i]=='?'||w[i]=='?'){
+                if(s[i]=='?'&&w[i]=='?') ans=ans*1ll*55%MOD;
+                else if(s[i]=='?') ans=ans*1ll*(w[i]-'0'+1)%MOD;
+                else ans=ans*1ll*(10-s[i]+'0')%MOD;
+            }
+        }
+
+        sum=sum-ans;
+    }
+    else {
+        LL ans1=1;
+        for(int i=0;i<n;i++){
+            if(s[i]=='?'||w[i]=='?'){
+                if(s[i]=='?'&&w[i]=='?') ans1=ans1*1ll*55%MOD;
+                else if(s[i]=='?') ans1=ans1*1ll*(10-w[i]+'0')%MOD;
+                else ans1=ans1*1ll*(s[i]-'0'+1)%MOD;
+            }
+        }
+        LL ans2=1;
+        for(int i=0;i<n;i++){
+            if(s[i]=='?'||w[i]=='?'){
+                if(s[i]=='?'&&w[i]=='?') ans2=ans2*1ll*55%MOD;
+                else if(s[i]=='?') ans2=ans2*1ll*(w[i]-'0'+1)%MOD;
+                else ans2=ans2*1ll*(10-s[i]+'0')%MOD;
+            }
+        }
+        LL ans3=1;
+        for(int i=0;i<n;i++){
+                if(s[i]=='?'&&w[i]=='?') ans3=ans3*10ll%MOD;
+        }
+        sum=sum-(ans1+ans2-ans3);
+    }
+    sum%=MOD;
+    sum=(sum+MOD)%MOD;
+    printf("%I64d\n",sum);
+    return 0;
+}
+/*
+2
+3?
+57
+
+
+2
+5?
+37
+*/
