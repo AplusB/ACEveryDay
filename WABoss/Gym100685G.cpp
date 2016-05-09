@@ -43,6 +43,7 @@ void init(int n){
         }
     }
 }
+
 bool lca(int u,int v){
     if(dep[u]>dep[v]){
         for(int i=0; i<17; ++i){
