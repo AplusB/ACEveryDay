@@ -11,7 +11,7 @@ struct Num{
         a[0]=n;
         flag=0;
     }
-    Num operator+(const Num &n)const{
+    Num operator+(const Num &n) const {
         Num res;
         unsigned long long carry=0;
         for(int i=0; i<11; ++i){
