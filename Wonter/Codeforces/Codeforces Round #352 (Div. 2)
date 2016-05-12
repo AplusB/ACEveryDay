@@ -1,0 +1,94 @@
+//C. Recycling Bottles
+
+#include <bits/stdc++.h>
+using namespace std;
+
+vector<pair<double, __int64> > fir;
+vector<pair<double, __int64> > sec;
+pair<__int64, __int64> a;
+pair<__int64, __int64> b;
+pair<__int64, __int64> t;
+pair<__int64, __int64> p[100500];
+double DisTance(pair<__int64, __int64> x, pair<__int64, __int64> y)
+{
+    return sqrt((x.first - y.first)*(x.first - y.first) + (x.second - y.second)*(x.second - y.second));
+}
+int main()
+{
+    __int64 n;
+    scanf("%I64d%I64d", &a.first, &a.second);
+    scanf("%I64d%I64d", &b.first, &b.second);
+    scanf("%I64d%I64d", &t.first, &t.second);
+    scanf("%I64d", &n);
+    for(__int64 i = 1; i <= n; ++i)
+        scanf("%I64d%I64d", &p[i].first, &p[i].second);
+    if(n == 1)
+    {
+        double ans;
+        ans = min(DisTance(a, p[1]) + DisTance(p[1], t), DisTance(b, p[1]) + DisTance(p[1], t));
+        printf("%f\n", ans);
+        return 0;
+    }
+    for(__int64 i = 1; i <= n; ++i)
+    {
+        fir.push_back(make_pair(DisTance(p[i], t) - DisTance(a, p[i]), i));
+        sec.push_back(make_pair(DisTance(p[i], t) - DisTance(b, p[i]), i));
+    }
+    sort(fir.begin(), fir.end(), greater<pair<double, __int64> >());
+    sort(sec.begin(), sec.end(), greater<pair<double, __int64> >());
+    __int64 chooseFir, chooesSec;
+    chooesSec = chooseFir = -1;
+    double maxDis = 0;
+    bool chooes = false;
+    for(auto ele : fir)
+    {
+        if(chooes == false || ele.first > maxDis)
+        {
+            chooseFir = ele.second;
+            chooesSec = -1;
+            maxDis = ele.first;
+            chooes = true;
+            break;
+        }
+    }
+    for(auto ele : sec)
+    {
+        if(chooes == false || ele.first > maxDis)
+        {
+            chooseFir = -1;
+            chooesSec = ele.second;
+            maxDis = ele.first;
+            chooes = true;
+            break;
+        }
+    }
+    for(auto eleA : fir)
+    {
+        for(auto eleB : sec)
+        {
+            if(eleB.second != eleA.second)
+            {
+                if(chooes == false || eleA.first + eleB.first > maxDis)
+                {
+                    maxDis = eleA.first + eleB.first;
+                    chooseFir = eleA.second;
+                    chooesSec = eleB.second;
+                    chooes = true;
+                }
+                break;
+            }
+        }
+    }
+    double ans = 0.0;
+    for(__int64 i = 1; i <= n; ++i)
+    {
+        if(i == chooseFir)
+            ans += DisTance(a, p[i]) + DisTance(p[i], t);
+        else if(i == chooesSec)
+            ans += DisTance(b, p[i]) + DisTance(p[i], t);
+        else
+            ans += 2 * DisTance(p[i], t);
+    }
+    printf("%f\n", ans);
+    return 0;
+}

@@ -1,0 +1,48 @@
+/* ***********************************************
+Author        :axp
+Created Time  :2016/5/11 19:42:53
+TASK		  :B.cpp
+LANG          :C++
+************************************************ */
+
+#include <iostream>
+#include <cstdio>
+#include <cstring>
+#include <algorithm>
+#include <vector>
+#include <queue>
+#include <set>
+#include <map>
+#include <string>
+#include <cmath>
+#include <cstdlib>
+#include <ctime>
+using namespace std;
+
+const int N = 1e6+10;
+int n,m;
+bool dp[2][N];
+
+int main()
+{
+    //freopen("in.txt","r",stdin);
+    //freopen("out.txt","w",stdout);
+    scanf("%d%d",&n,&m);
+
+	for(int i=1;i<=n;i++)
+	{
+		bool k=i&1;
+		int x;
+		scanf("%d",&x);
+		for(int j=0;j<m;j++)
+			dp[k][(j+x)%m]=dp[!k][j] | dp[!k][(j+x)%m];
+		dp[k][x%m]=1;
+		if(dp[k][0])
+		{
+			puts("YES");
+			return 0;
+		}
+	}
+	puts("NO");
+    return 0;
+}
