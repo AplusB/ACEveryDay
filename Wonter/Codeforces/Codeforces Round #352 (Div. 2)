@@ -92,3 +92,65 @@ int main()
     printf("%f\n", ans);
     return 0;
 }
+
+
+//D. Robin Hood
+#include <bits/stdc++.h>
+using namespace std;
+
+__int64 arr[500400];
+__int64 n, k;
+__int64 GetMin()
+{
+    __int64 left, right;
+    __int64 sum = 0;
+    for(__int64 i = 1; i <= n; ++i)
+        sum += arr[i];
+    left = *min_element(arr + 1, arr + 1 + n);
+    right = sum / n;
+    while(left < right)
+    {
+        __int64 mid = left + ((right - left + 1) >> 1);
+        __int64 t = 0;
+        for(__int64 i = 1; i <= n; ++i)
+            if(arr[i] < mid)
+                t += mid - arr[i];
+        if(t <= k)
+            left = mid;
+        else
+            right = mid - 1;
+    }
+    return left;
+}
+__int64 GetMax()
+{
+    __int64 left, right;
+    __int64 sum = 0;
+    for(__int64 i = 1; i <= n; ++i)
+        sum += arr[i];
+    left = (sum + n - 1) / n;
+    right = *max_element(arr + 1, arr + 1 + n);
+    while(left < right)
+    {
+        __int64 mid = left + ((right - left) >> 1);
+        __int64 t = 0;
+        for(__int64 i = 1; i <= n; ++i)
+            if(arr[i] > mid)
+                t += arr[i] - mid;
+        if(t <= k)
+            right = mid;
+        else
+            left = mid + 1;
+    }
+    return left;
+}
+int main()
+{
+    scanf("%I64d%I64d", &n, &k);
+    for(__int64 i = 1; i <= n; ++i)
+        scanf("%I64d", &arr[i]);
+    __int64 maxn = GetMax();
+    __int64 minn = GetMin();
+    printf("%I64d\n", maxn - minn);
+    return 0;
+}
