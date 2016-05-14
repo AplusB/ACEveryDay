@@ -1,0 +1,72 @@
+#include<algorithm>
+#include<iostream>
+#include<cstring>
+#include<cstdio>
+#include<string>
+#include<vector>
+#include<queue>
+#include<cmath>
+#include<stack>
+#include<set>
+#include<map>
+#define INF 0x3f3f3f3f
+#define Mn 200010
+#define Mm 2000005
+#define mod 1000000007
+#define CLR(a,b) memset((a),(b),sizeof((a)))
+#define CPY(a,b) memcpy ((a), (b), sizeof((a)))
+#pragma comment(linker, "/STACK:102400000,102400000")
+#define ul u<<1
+#define ur (u<<1)|1
+using namespace std;
+typedef long long ll;
+#define eps 1e-10
+int a[Mn],b[Mn];
+struct node {
+    double dis;
+    int i;
+    node(){}
+    node(double dis,int i):dis(dis),i(i){}
+    bool operator <(const node x) const {
+        if(x.dis-dis<0) return 0;
+        return 1;
+    }
+}pa[Mn],pb[Mn];
+double getdis(double x,double y,double c,double d) {
+    return sqrt((x-c)*(x-c)+(y-d)*(y-d));
+}
+double dis[Mn];
+int main() {
+    int x1,y1,x2,y2,t1,t2;
+    int n;
+    scanf("%d%d%d%d%d%d",&x1,&y1,&x2,&y2,&t1,&t2);
+    double ans=0.0;
+    double disa=getdis(x1,y1,t1,t2);
+    double disb=getdis(x2,y2,t1,t2);
+    scanf("%d",&n);
+    for(int i=0;i<n;i++) {
+        scanf("%d%d",&a[i],&b[i]);
+        dis[i]=getdis(a[i],b[i],t1,t2);
+        pa[i]=node(dis[i]-getdis(x1,y1,a[i],b[i]),i);
+        pb[i]=node(dis[i]-getdis(x2,y2,a[i],b[i]),i);
+        ans+=dis[i]*2;
+    }
+    sort(pa,pa+n);
+    sort(pb,pb+n);
+    int pos=n-1;
+    double ans1=min(ans-pa[pos].dis,ans+disa);
+    double ans2=min(ans-pb[pos].dis,ans+disb);
+    double ans3;
+
+    if(pb[pos].i==pa[pos].i) {
+        if(pb[pos].dis+pa[pos-1].dis>pa[pos].dis+pb[pos-1].dis) {
+           ans3=ans-pb[pos].dis-pa[pos-1].dis;
+        } else {
+            ans3=ans-pa[pos].dis-pb[pos-1].dis;
+        }
+    } else {
+        ans3=ans-pa[pos].dis-pb[pos].dis;
+    }
+    printf("%.10f\n",min(ans1,min(ans2,ans3)));
+    return 0;
+}
