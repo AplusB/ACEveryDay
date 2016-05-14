@@ -15,7 +15,8 @@ bool dfs(int u)
     for(int i = 0; i < edge[u].size(); i++) {
         int v = edge[u][i];
         if(!vis[v]) {
-            return dfs(v);
+            if(!dfs(v))
+                return false;
         } else if(vis[v] == 1) {
             return false;
         }
