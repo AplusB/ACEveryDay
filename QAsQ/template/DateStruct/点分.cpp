@@ -4,8 +4,7 @@ int siz[maxn],msiz[maxn];
 int calroot(int st,int fa,int all){
     int ret = -1;
     siz[st] = 1,msiz[st] = 0;
-    for(auto it : edge[st]){
-        int x = it.first;
+    for(auto x : edge[st]){
         if(x != fa && !vis[x]){
             int trot = calroot(x,st,all);
             if(ret==-1 || msiz[ret]>msiz[trot])
@@ -19,8 +18,6 @@ int calroot(int st,int fa,int all){
         ret = st;
     return ret;
 }
-
-
 int dfs(int st){
     vis[st] = true;
     int ans = 0;
@@ -28,8 +25,7 @@ int dfs(int st){
 
     \\update rooter
 
-    for(auto it :edge[st]){
-        int x = it.first,v = it.second;
+    for(auto x :edge[st]){
         if(vis[x]) continue;
 
         \\update soner
@@ -38,7 +34,6 @@ int dfs(int st){
     }
     return ans;
 }
-
 int cal(int n){
     memset(vis,0,sizeof(vis));
     return dfs(calroot(1,0,n));
