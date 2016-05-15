@@ -66,7 +66,7 @@ Node query(int L, int R, int l, int r, int rt) {
 	int m = (l + r) >> 1;
 	Node ret(0x7f7f7f, 0), tmp;
 	if(m >= L) {
-		Node tmp = query(L, R, l, m, lrt);
+		tmp = query(L, R, l, m, lrt);
 		ret.lo = min(ret.lo, tmp.lo);
 		ret.hi = max(ret.hi, tmp.hi);
 	}
