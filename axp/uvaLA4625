@@ -1,0 +1,87 @@
+/* ***********************************************
+Author        :axp
+Created Time  :2016/5/16 18:42:07
+TASK		  :L4625.cpp
+LANG          :C++
+************************************************ */
+
+#include <iostream>
+#include <cstdio>
+#include <cstring>
+#include <algorithm>
+#include <vector>
+#include <queue>
+#include <set>
+#include <map>
+#include <string>
+#include <cmath>
+#include <cstdlib>
+#include <ctime>
+using namespace std;
+
+typedef long long ll;
+const int N = 4e4+10;
+int T;
+int n,m,d;
+int ar[N];
+int dp[N][2];
+int pre[N];
+
+bool ok(int x)
+{
+	int l=0;
+	dp[0][1]=1<<30;
+	for(int i=2;i<=n;i+=2)
+	{
+		dp[i][0]=dp[i-2][1]+1;
+		dp[i][1]=dp[i-2][0]+1;
+		for(int j=i-2;j>=0 && (i-j)<=d;j-=2)
+		{
+			int mid=(i+j)>>1;
+			if(pre[i]-pre[mid]>x)break;
+			if(pre[mid]-pre[j]<=x)dp[i][0]=min(dp[i][0],dp[j][1]+1),dp[i][1]=min(dp[i][1],dp[j][0]+1);
+		}
+	}
+
+	int re=dp[n][(m)%2];
+	//cout<<x<<' '<<re<<endl;
+	//if(x==129)for(int i=2;i<=n;i+=2)cout<<i<<' '<<dp[i][0]<<' '<<dp[i][1]<<endl;
+	return re<=m;
+}
+
+int main()
+{
+    //freopen("in.txt","r",stdin);
+    //freopen("out.txt","w",stdout);
+    scanf("%d",&T);
+	while(T--)
+	{
+		scanf("%d%d%d",&n,&m,&d);
+		m--;
+		d*=2;
+		int l=1,r=1e9;
+		for(int i=1;i<=n;i++)
+		{
+			scanf("%d",&ar[i]);
+			pre[i]=pre[i-1]+ar[i];
+			l=max(l,ar[i]);
+		}
+		if(2*m>n || n%2 || d*m<n)
+		{
+			puts("BAD");
+			continue;
+		}
+		r=pre[n];
+		while(l<r)
+		{
+			int mid=(l+r)>>1;
+			if(ok(mid))
+				r=mid;
+			else
+				l=mid+1;
+		}
+		if(l>3e8)exit(1);
+		printf("%d\n",l);
+	}
+    return 0;
+}
