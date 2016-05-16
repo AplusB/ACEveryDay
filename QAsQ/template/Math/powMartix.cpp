@@ -25,9 +25,9 @@ martix operator * (const martix & A,const martix & B){
     martix C;
     C.tz();
     for(int i=0;i<N;i++)
-        for(int j=0;j<N;j++)
-            for(int k=0;k<N;k++)
-                C.num[i][j]=(C.num[i][j]+A.num[i][k]*B.num[k][j]%MOD)%MOD;
+    for(int j=0;j<N;j++)
+    for(int k=0;k<N;k++)
+    (C.num[i][j]+=A.num[i][k]*B.num[k][j]%MOD)%MOD;
     return C;
 }
 
