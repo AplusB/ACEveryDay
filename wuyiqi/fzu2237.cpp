@@ -19,6 +19,7 @@ struct Tree
         return pool++;
     }
     Tree *Insert(int l, int r, int num) {
+
         if(l == r) {
             return NewTree(lc, rc, sum + 1);
         }
@@ -33,15 +34,14 @@ struct Tree
 
 int Ask(Tree *u, Tree *v, Tree *lca, int l, int r, int k)
 {
-	printf("%d %d\n", l, r);
 	if(l == r) {
 		 return l;
 	}
 	int mid = l + r >> 1;
-	if(u->lc->sum + v->lc->sum - lca->lc->sum >= k) {
+	if(u->lc->sum + v->lc->sum - 2 * lca->lc->sum >= k) {
 		return Ask(u->lc, v->lc, lca->lc, l, mid, k);
 	} else {
-		return Ask(u->rc, v->rc, lca->rc, mid + 1, r, k - u->lc->sum - v->lc->sum + lca->lc->sum);
+		return Ask(u->rc, v->rc, lca->rc, mid + 1, r, k - u->lc->sum - v->lc->sum + 2 * lca->lc->sum);
 	}
 }
 
@@ -49,12 +49,11 @@ int f[20][N], dep[N];
 void dfs(int u, int fa = -1)
 {
     for(std::vector<std::pair<int,int> > ::iterator it = edge[u].begin(); it != edge[u].end(); ++it) if(it->first != fa){
-    	//printf("%d %d\n", u, it->first);
     	int v = it->first;
     	f[0][v] = u;
-        root[it->first] = root[u]->Insert(0, 100000, it->second);
-        dep[it->first] = dep[u] + 1;
-        dfs(it->first, u);
+        root[v] = root[u]->Insert(0, 100000, it->second);
+        dep[v] = dep[u] + 1;
+        dfs(v, u);
     }
 }
 
@@ -101,13 +100,12 @@ int main()
             scanf("%d%d", &u, &v);
             int lca = Lca(u, v);
             int len = dep[u] + dep[v] - 2 * dep[lca];
-            printf("lca=%d len=%d\n", lca, len);
-        	int ret = Ask(root[u], root[v], root[lca], 1, 100000, (len+1)/2 ) ;
+        	int ret = Ask(root[u], root[v], root[lca], 0, 100000, (len+1)/2 ) ;
             if(len & 1) {
             	printf("%d\n", ret);
             } else {
-            	int ret2 = Ask(root[u], root[v], root[lca], 1, 100000, len / 2 + 1);
-            	printf("%d\n", std::max(ret, ret2));
+            	int ret2 = Ask(root[u], root[v], root[lca], 0, 100000, len / 2 + 1);
+            	printf("%d\n", std::min(ret, ret2));
             }
         }
     }
