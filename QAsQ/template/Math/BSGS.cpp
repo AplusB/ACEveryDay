@@ -1,10 +1,3 @@
-#include<cstdio>
-#include<cstring>
-#include<algorithm>
-#include<cmath>
-#include<map>
-using namespace std;
-
 map<int,int> x;
 
 int log_mod(int a,int b,int n){

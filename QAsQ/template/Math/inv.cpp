@@ -7,7 +7,7 @@ long long mod_reverse(long long a,long long n)
     else return -1;
 }
 
-//这个只能求 a < m 的情况，而且必须保证 a 和 m 互质
+//a < m && gcd(a,m) == 1
 long long inv(long long a,long long m)
 {
     if(a == 1)return 1;

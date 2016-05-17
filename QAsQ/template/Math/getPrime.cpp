@@ -1,10 +1,3 @@
-#include<cstdio>
-#include<cstring>
-#include<algorithm>
-using namespace std;
-
-const int plen=1123456;
-
 int prime[plen+1];
 int mobius[plen+1];
 int getPrime(){
