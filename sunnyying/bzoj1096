@@ -1,0 +1,52 @@
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
+#include <algorithm>
+#include <cmath>
+#include <stack>
+#include <queue>
+#include <vector>
+#include <map>
+#include <string>
+#include <iostream>
+#define INF 0x3f3f3f3f
+#define ll long long
+using namespace std;
+ll x[1000010],p[1000010],c[1000010];
+int q[1000010];
+ll dp[1000010],sumxp[1000010],sump[1000010];
+ll getup(int i,int j)
+{
+    return dp[i]+sumxp[i]-dp[j]-sumxp[j];
+}
+ll getdown(int i,int j)
+{
+    return sump[i]-sump[j];
+}
+ll getdp(int i,int j)
+{
+    return dp[j]+x[i]*(sump[i]-sump[j])-sumxp[i]+sumxp[j]+c[i];
+}
+int main()
+{
+    int n;
+    scanf("%d",&n);
+    dp[0]=sump[0]=sumxp[0]=0;
+    for(int i=1;i<=n;i++)
+    {
+        scanf("%lld%lld%lld",&x[i],&p[i],&c[i]);
+        sump[i]=sump[i-1]+p[i];
+        sumxp[i]=sumxp[i-1]+x[i]*p[i];
+    }
+    int head,tail;
+    q[0]=head=0;tail=1;
+    for(int i=1;i<=n;i++)
+    {
+        while(head+1<tail&&getup(q[head+1],q[head])<=x[i]*getdown(q[head+1],q[head])) head++;
+        dp[i]=getdp(i,q[head]);
+        while(head+1<tail&&getup(q[tail-1],q[tail-2])*getdown(i,q[tail-1])>=getup(i,q[tail-1])*getdown(q[tail-1],q[tail-2])) tail--;
+        q[tail++]=i;
+    }
+    cout<<dp[n]<<endl;
+    return 0;
+}

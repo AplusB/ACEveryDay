@@ -1,0 +1,23 @@
+//C - Money Transfers
+
+#include <bits/stdc++.h>
+using namespace std;
+
+map<long long, int> mp;
+int main()
+{
+    int n;
+    long long pre = 0;
+    int ans = 0;
+    scanf("%d", &n);
+    for(int i = 1; i <= n; ++i)
+    {
+        int x;
+        scanf("%d", &x);
+        pre += x;
+        ++mp[pre];
+        ans = max(ans, mp[pre]);
+    }
+    printf("%d\n", n - ans);
+    return 0;
+}
