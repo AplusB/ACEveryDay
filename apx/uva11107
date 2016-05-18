@@ -1,0 +1,214 @@
+/* ***********************************************
+Author        :axp
+Created Time  :2016/5/18 13:36:03
+TASK		  :11107.cpp
+LANG          :C++
+************************************************ */
+
+#include <iostream>
+#include <cstdio>
+#include <cstring>
+#include <algorithm>
+#include <vector>
+#include <queue>
+#include <set>
+#include <map>
+#include <string>
+#include <cmath>
+#include <cstdlib>
+#include <ctime>
+using namespace std;
+
+const int Mn = 105;
+const int Len = 1005;
+const int N = Mn*Len;
+int n;
+char ch[Len];
+int ar[N];
+bool kase;
+int sa[N];
+int height[N];
+int rnk[N];
+int c[N];
+int tmp1[N],tmp2[N];
+int m;
+int mx;
+int wh[N];
+
+void test(int x=2)
+{
+	if(x!=2)return;
+	//for(int i=0;i<n;i++)cout<<i<<' '<<sa[i]<<endl;
+	for(int i=0;i<n;i++)cout<<i<<' '<<rnk[i]<<' '<<sa[i]<<' '<<height[i]<<' '<<height[rnk[i]]<<endl;
+	
+	cout<<endl;
+}
+
+void build_sa()
+{
+	int *x=tmp1,*y=tmp2;
+	memset(c,0,sizeof c);
+	for(int i=0;i<n;i++)c[x[i]=ar[i]]++;
+	for(int i=1;i<=m;i++)c[i]+=c[i-1];
+	for(int i=n-1;i>=0;i--)sa[--c[x[i]]]=i;
+	for(int k=1;k<=n;k<<=1)
+	{
+		int p=0;
+		for(int i=n-k;i<n;i++)y[p++]=i;
+		for(int i=0;i<n;i++)if(sa[i]>=k)y[p++]=sa[i]-k;
+
+		for(int i=0;i<=m;i++)c[i]=0;
+		for(int i=0;i<n;i++)c[x[y[i]]]++;
+		for(int i=1;i<=m;i++)c[i]+=c[i-1];
+		for(int i=n-1;i>=0;i--)sa[--c[x[y[i]]]]=y[i];
+
+		swap(x,y);
+		p=1; x[sa[0]]=0;
+		for(int i=1;i<n;i++)
+			x[sa[i]]=y[sa[i-1]]==y[sa[i]] && y[sa[i-1]+k]==y[sa[i]+k]? p-1:p++;
+		if(p>=n)break;
+		m=p;
+	}
+}
+
+void get_height()
+{
+	int j,k=0;
+	for(int i=0;i<n;i++)rnk[sa[i]]=i;
+	for(int i=0;i<n;i++)
+	{
+		if(k)k--;
+		if(rnk[i]==0)continue;
+		int j = sa[rnk[i]-1];
+		while(ar[i+k]==ar[j+k])k++;
+		height[rnk[i]]=k;
+	}
+}
+
+int vis[N];
+
+void pre()
+{
+	build_sa();
+	get_height();
+}
+
+bool ok(int x)
+{
+	int now=0;
+	int lst=-1;
+	memset(vis,-1,sizeof vis);
+	for(int i=0;i<n;i++)
+	{
+		if(height[i]>=x)
+		{
+			if(lst<0)lst=i;
+			if(vis[wh[sa[i]]]!=lst)
+			{
+				vis[wh[sa[i]]]=lst;
+				now++;
+			}
+			if(vis[wh[sa[i-1]]]!=lst)
+			{
+				vis[wh[sa[i-1]]]=lst;
+				now++;
+			}
+		}
+		else
+		{
+			now=0;
+			lst=-1;
+		}
+		if(now>=mx)return 1;
+	}
+	return 0;
+}
+
+void out(int x)
+{
+	//cout<<x<<endl;
+	int now=0;
+	int lst=-1;
+	memset(vis,-1,sizeof vis);
+	//test();
+	for(int i=0;i<n;i++)
+	{
+		
+		//cout<<i<<' '<<sa[i]<<' '<<height[i]<<endl;
+		if(height[i]>=x)
+		{
+			//cout<<i<<' '<<height[i]<<' '<<x<<endl;
+			if(lst<0)lst=i;
+			if(vis[wh[sa[i]]]!=lst)
+			{
+				vis[wh[sa[i]]]=lst;
+				now++;
+				if(now==mx)
+				{
+					//cout<<i<<endl;
+					for(int i=sa[lst];i<sa[lst]+x;i++)
+						putchar(ar[i]);
+					putchar(10);
+				}
+			}
+			if(vis[wh[sa[i-1]]]!=lst)
+			{
+				vis[wh[sa[i-1]]]=lst;
+				now++;
+				if(now==mx)
+				{
+					//cout<<i<<endl;
+					for(int i=sa[lst];i<sa[lst]+x;i++)
+						putchar(ar[i]);
+					putchar(10);
+				}
+			}
+		}
+		else
+		{
+			now=0;
+			lst=-1;
+		}
+	}
+}
+
+int main()
+{
+    //freopen("in.txt","r",stdin);
+    //freopen("out.txt","w",stdout);
+    int k;
+	while(scanf("%d",&k)==1 && k)
+	{
+		n=0;
+		for(int i=0;i<k;i++)
+		{
+			scanf("%s",ch);
+			for(int j=0;ch[j];j++)
+			{
+				wh[n]=i;
+				ar[n++]=ch[j];
+			}
+			wh[n]=i;
+			ar[n++]=200+i;
+		}
+		m=200+k;
+		mx=k/2+1;
+		pre();
+		int l=0,r=n;
+		while(l<r)
+		{
+			int m=(l+r+1)>>1;
+			if(ok(m))
+				l=m;
+			else
+				r=m-1;
+		}
+		if(kase)putchar(10);
+		kase=1;
+		if(l==0)
+			puts("?");
+		else
+			out(l);
+	}
+    return 0;
+}
