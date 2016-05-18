@@ -1,42 +1,53 @@
 #include <iostream>
+#include <algorithm>
 #include <cstdio>
 #include <cstring>
-#include <algorithm>
+#include <cstdlib>
 #define endl '\n'
- 
+
 using namespace std;
- 
-const int MAXN = 25;
-char temp[2][MAXN];
-int a[2];
- 
+
+const int MAXN = 2005;
+
+int dp[10005][2005];
+int num[MAXN];
+int n;
+
 int main()
 {
-    int T;
-    scanf("%d",&T);
-    while(T--)
-    {
-        temp[0][0] = temp[1][0] = '\0';
-             
-        a[0] = 1;
-        a[1] = 0;
-        int index = 0;
-        int flag = 0;
-        scanf("%s",temp[flag]);
-         
-        while(scanf("%s",temp[flag ^ 1]) && strcmp(temp[flag ^ 1],"END") != 0)
-        {
-            if(strcmp(temp[flag ^ 1],temp[flag]) == 0)
-            {
-                a[index ^ 1]++;
-                index = index ^ 1;
-            }
-            else a[index]++;
-             
-            flag ^= 1;
-        }
-         
-        cout << a[0] * a[1] << endl;
-    }
-    return 0;
+	while(scanf("%d",&n) == 1)
+	{
+		int i;
+		for(i = 0;i < n;i++)
+		{
+			scanf("%d",&num[i]);
+		}
+		
+		sort(num,num + n);
+		int mmax = num[n - 1] - num[0];
+		int j,k;
+		int ans = 1;
+		
+		for(i = 0;i < n;i++)
+		{
+			for(j = 0;j <= (num[n - 1] - num[0]);j++)
+			{
+				dp[i][j] = 1;
+			}
+		}
+		
+		for(i = 0;i < n;i++)
+		{
+			for(j = 0;j < i;j++)
+			{
+				k = num[i] - num[j];
+				dp[i][k] = max(dp[i][k],dp[j][k] + 1);
+				ans = max(dp[i][k],ans);
+			}
+			
+		}
+		
+		cout<< ans << endl;
+	}
+	return 0;
 }
