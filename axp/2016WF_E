@@ -1,0 +1,101 @@
+/* ***********************************************
+Author        :axp
+Created Time  :2016/5/19 12:38:06
+TASK		  :E.cpp
+LANG          :C++
+************************************************ */
+
+#include <iostream>
+#include <cstdio>
+#include <cstring>
+#include <algorithm>
+#include <vector>
+#include <queue>
+#include <set>
+#include <map>
+#include <string>
+#include <cmath>
+#include <cstdlib>
+#include <ctime>
+using namespace std;
+
+typedef long long ll;
+ll x,y;
+ll ans;
+const ll inf=1ll<<60;
+
+void f(ll v)
+{
+	ll now=0;
+	ll t=x;
+	ll c=1;
+	while(t)
+	{
+		if(t%v>=10)return;
+		now+=(t%v)*c;
+		t/=v;
+		c*=10;
+	}
+	if(now>=y)
+	{
+		//cout<<now<<' '<<v<<endl;
+		ans=max(ans,v);
+	}
+}
+
+ll cha(ll v,ll k)
+{
+	ll re=0;
+	ll c=1;
+	while(v)
+	{
+		if( (1.0*re+(v%10)*c-5)>inf )return inf;
+		re+=(v%10)*c;
+		v/=10;
+		if((1.0*c*k-5)>inf)
+		{
+			if(v==0)return re;
+			else return inf;
+		}
+		c*=k;
+	}
+	return re;
+}
+
+void g(ll v)
+{
+	ll l=2,r=inf;
+	while(l<r)
+	{
+		//cout<<l<<' '<<r<<endl;
+		ll m=(l+r)>>1;
+		if(cha(v,m)<x)
+			l=m+1;
+		else
+			r=m;
+	}
+	if(cha(v,l)==x)
+	{
+		//cout<<cha(v,l)<<' '<<v<<' '<<l<<endl;
+		ans=max(ans,l);
+	}
+}
+
+int main()
+{
+    //freopen("in.txt","r",stdin);
+    //freopen("out.txt","w",stdout);
+    cin>>x>>y;
+	ans=10;
+	for(int i=11;i<=1e6+5;i++)
+		f(i);
+	//g(33);
+	//cout<<'#'<<endl;
+	for(ll i=y;i<=1e3+5;i++)
+	{
+		//cout<<i<<endl;
+		g(i);
+	}
+	cout<<ans<<endl;
+    return 0;
+}
