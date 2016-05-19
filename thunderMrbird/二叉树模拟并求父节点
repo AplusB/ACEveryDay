@@ -1,0 +1,20 @@
+#include <bits/stdc++.h>
+using namespace std;
+map<int, int> mp;
+int main(){
+	int n, x;
+	mp[0] = 0;
+	mp[2e9+1] = 0;
+	cin >> n;
+	for (int i = 0;i<n;i++){
+		cin >> x;
+		auto l = mp.lower_bound(x);
+		auto r = l--;
+		auto s = l->second>r->second ? l : r;
+		if (i) cout << (s->first) << " ";
+		mp[x] = s->second + 1;
+	}
+	//for(auto i : mp)
+    //    cout<<i.first<<" "<<i.second<<" ";
+	return 0;
+}
