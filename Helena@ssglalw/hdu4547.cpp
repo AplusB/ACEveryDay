@@ -71,13 +71,10 @@ void dfs(int r, int l){
 			tar = real_tar;
 		}
 		//cout << "query " << cur << tar << endl;
-		if(cur == tar) ans[ans_id] = 0;
-		else{
-			int ca = find(query_tar[r][i]);
-			//cout << query_tar[r][i] << "ca = " << ca << endl;
-			if(ca == tar) ans[ans_id] = depth[cur] - depth[ca];//从cur上升到ca, 亦步亦趋
-			else ans[ans_id] = depth[cur] - depth[ca] + 1;//从ca下降到tar，一步到位
-		}
+		int ca = find(query_tar[r][i]);
+		if(tar == ca) ans[ans_id] = depth[cur] - depth[ca];//从cur上升到ca, 亦步亦趋
+        	else if(cur == ca) ans[ans_id] = 1;//从ca下降到tar，一步到位
+        	else ans[ans_id] = depth[cur] - depth[ca] + 1;
 	}
 }
 
