@@ -83,15 +83,16 @@ void unite(int x, int y) {
 }
 
 void dfs(int u) {
-	vis[u] = 1;
-	if(u == ::u && vis[::v]) printf("%d\n", find(::v));
-	if(u == ::v && vis[::u]) printf("%d\n", find(::u));
+	pre[u] = u;
 	Rep(i, G[u].size()) {
 		if(!vis[G[u][i]]) {
 			dfs(G[u][i]);
 			unite(u, G[u][i]);
 		}
 	}
+	vis[u] = 1;
+	if(u == ::u && vis[::v]) printf("%d\n", find(::v));
+	if(u == ::v && vis[::u]) printf("%d\n", find(::u));
 }
 
 int main() {
@@ -100,7 +101,7 @@ int main() {
 	Rint(T);
 	W(T) {
 		Cls(in); Cls(vis);
-		Rep(i, maxn) G[i].clear(), pre[i] = i;
+		Rep(i, maxn) G[i].clear();
 		Rint(n);
 		Rep(i, n-1) {
 			Rint(u); Rint(v);
