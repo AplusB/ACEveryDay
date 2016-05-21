@@ -1,0 +1,105 @@
+/* ***********************************************
+Author        :axp
+Created Time  :2016/5/21 19:37:37
+TASK		  :G.cpp
+LANG          :C++
+************************************************ */
+
+#include <iostream>
+#include <cstdio>
+#include <cstring>
+#include <algorithm>
+#include <vector>
+#include <queue>
+#include <set>
+#include <map>
+#include <string>
+#include <cmath>
+#include <cstdlib>
+#include <ctime>
+using namespace std;
+
+typedef long long ll;
+const int N = 4e3+10;
+const double eps=1e-13;
+
+struct Point
+{
+	int x,y;
+	double c;
+	int v;
+};
+
+Point p[N],ar[N];
+int n;
+ll ans;
+
+bool cmp(Point a,Point b)
+{
+	if(a.c*b.c<0)return a.c>b.c;
+	if(fabs(a.c-b.c)<eps)return a.v>b.v;
+	return a.c<b.c;
+}
+
+int main()
+{
+    //freopen("in.txt","r",stdin);
+    //freopen("out.txt","w",stdout);
+	scanf("%d",&n);
+	int x1,x2,y;
+	for(int i=0;i<n;i++)
+	{
+		scanf("%d%d%d",&x1,&x2,&y);
+		if(x1>x2)swap(x1,x2);
+		y=-y;
+		p[i<<1].x=x1;
+		p[i<<1|1].x=x2;
+		p[i<<1].y=p[i<<1|1].y=y;
+		p[i<<1].v=p[i<<1|1].v=x2-x1;
+	}
+	ll now;
+	int cnt;
+	for(int i=0;i<2*n;i++)
+	{
+		cnt=0;
+		for(int j=0;j<n;j++)
+		{
+			if(p[j<<1].y==p[i].y || p[j<<1].v==0)
+			{
+				//cout<<j<<endl;
+				continue;
+			}
+			
+			for(int b=0;b<2;b++)
+			{
+				ar[cnt<<1|b]=p[j<<1|b];
+				ar[cnt<<1|b].x-=p[i].x;
+				ar[cnt<<1|b].y-=p[i].y;
+				if(ar[cnt<<1|b].x==0)
+					ar[cnt<<1|b].c=1e9;
+				else
+					ar[cnt<<1|b].c=1.0*ar[cnt<<1|b].y/ar[cnt<<1|b].x;
+			}
+
+
+			if(ar[cnt<<1].y>0)
+				ar[cnt<<1].v=-ar[cnt<<1].v;
+			else
+				ar[cnt<<1|1].v=-ar[cnt<<1|1].v;
+
+			cnt++;
+		}
+
+		now=p[i].v;
+		sort(ar,ar+2*cnt,cmp);
+		for(int j=0;j<2*cnt;j++)
+		{
+			now+=ar[j].v;
+			ans=max(ans,now);
+		}
+		ans=max(ans,now);
+	}
+	printf("%lld\n",ans);
+    return 0;
+}
+
