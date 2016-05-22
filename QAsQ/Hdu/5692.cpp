@@ -50,7 +50,7 @@ void push_down(Now){
     }
 }
 
-void update(Now,int ul,int ur,int v){
+void update(Now,int ul,int ur,LL v){
     if(ul <= l && r <= ur){
         info[o] += v,lazy[o] += v;
         return;
@@ -83,9 +83,9 @@ int n;
 LL nodev[maxn];
 
 void update(int x,LL v){
-    LL dif = v - nodev[x];
-    update(root,tid[x],tid[x]+siz[x]-1,dif);
-    nodev[x] = v;
+    v -= nodev[x];
+    update(root,tid[x],tid[x]+siz[x]-1,v);
+    nodev[x] += v;
 }
 
 LL query(int x){
@@ -101,29 +101,18 @@ int main(){
         int x,y;
         for(int i=1;i<n;i++){
             scanf("%d %d",&x,&y);
-            x++,y++;
             edge[x].push_back(y);
             edge[y].push_back(x);
         }
         _cnt = 1;
-        for(int i=1;i<=n;i++)
+        for(int i=0;i<n;i++)
             scanf("%I64d",&nod[i]);
-        dfs(1,0,0);
-//        for(int i=1;i<=n;i++){
-//            printf(i<n?"%d ":"%d\n",siz[i]);
-//        }
-//        for(int i=1;i<=n;i++){
-//            printf(i<n?"%d ":"%d\n",tid[i]);
-//        }
+        dfs(0,-1,0);
         sinit();
-        memset(nodev,0,sizeof(nodev));
-        for(int i=1;i<=n;i++){
+        for(int i=0;i<n;i++){
             update(root,tid[i],tid[i],sum[i]);
             nodev[i] = nod[i];
         }
-//        for(int i=1;i<=n;i++){
-//            printf(i<n?"%lld ":"%lld\n",query(root,tid[i],tid[i]));
-//        }
         printf("Case #%d:\n",icase++);
         int ord,pos;
         LL v;
@@ -131,15 +120,12 @@ int main(){
             scanf("%d",&ord);
             if(ord){
                 scanf("%d",&pos);
-                pos++;
                 printf("%I64d\n",query(pos));
             }
             else{
                 scanf("%d %I64d",&pos,&v);
-                pos++;
                 update(pos,v);
             }
-//            printf("los = %d %d\n",tid[pos],tid[pos]+siz[pos]-1);
         }
     }
     return 0;
