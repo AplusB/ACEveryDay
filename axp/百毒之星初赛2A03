@@ -1,0 +1,165 @@
+/* ***********************************************
+Author        :axp
+Created Time  :2016/5/23 16:21:03
+TASK		  :new.cpp
+LANG          :C++
+************************************************ */
+
+#pragma comment(linker, "/STACK:10240000,10240000")
+#include <iostream>
+#include <cstdio>
+#include <cstring>
+#include <algorithm>
+#include <vector>
+#include <queue>
+#include <set>
+#include <map>
+#include <string>
+#include <cmath>
+#include <cstdlib>
+#include <ctime>
+using namespace std;
+
+typedef long long ll;
+const int N = 1e5+10;
+int T;
+int n,m;
+int pos[N];
+int en[N];
+ll ar[N];
+ll save[N];
+int to[N];
+int cnt;
+vector<int> ve[N];
+
+void dfs(int p,int x)
+{
+	cnt++;
+	pos[x]=cnt;
+	to[cnt]=x;
+	if(p>=0)ar[x]+=ar[p];
+	
+	for(int i=0;i<ve[x].size();i++)
+	{
+		int &y=ve[x][i];
+		if(y==p)continue;
+		dfs(x,y);
+	}
+	en[x]=cnt;
+}
+
+struct Point
+{
+	int l,r;
+	bool lazy;
+	ll s;
+	ll v;
+}tre[N<<2];
+
+void init(int now,int l,int r)
+{
+	Point &p=tre[now];
+	p.l=l;
+	p.r=r;
+	p.lazy=p.s=0;
+	if(l==r)
+	{
+		p.v=ar[to[l]];
+		return;
+	}
+	int m=(l+r)>>1;
+	init(now<<1,l,m);
+	init(now<<1|1,m+1,r);
+	p.v=max(tre[now<<1].v,tre[now<<1|1].v);
+}
+
+void pushdown(int now)
+{
+	Point &p=tre[now];
+	if(p.lazy==0)return;
+	p.v+=p.s;
+	if(p.l!=p.r)
+	{
+		tre[now<<1].lazy=tre[now<<1|1].lazy=1;
+		tre[now<<1].s+=p.s;
+		tre[now<<1|1].s+=p.s;
+	}
+	p.s=p.lazy=0;
+}
+
+void upd(int now,int l,int r,int v)
+{
+	Point &p=tre[now];
+	pushdown(now);
+	if(l<=p.l && p.r<=r)
+	{
+		p.lazy=1;
+		p.s=v;
+		return;
+	}
+	int m=(p.l+p.r)>>1;
+	if(m>=l)upd(now<<1,l,r,v);
+	if(m+1<=r)upd(now<<1|1,l,r,v);
+	p.v=max(tre[now<<1].v+tre[now<<1].s,tre[now<<1|1].v+tre[now<<1|1].s);
+}
+
+ll que(int now,int l,int r)
+{
+	Point &p=tre[now];
+	pushdown(now);
+	if(l<=p.l && p.r<=r)
+		return p.v;
+	ll re=-(1ll<<60);
+	int m=(p.l+p.r)>>1;
+	if(m>=l)re=max(re,que(now<<1,l,r));
+	if(m+1<=r)re=max(re,que(now<<1|1,l,r));
+	return re;
+}
+
+int main()
+{
+    //freopen("in.txt","r",stdin);
+    //freopen("out.txt","w",stdout);
+	scanf("%d",&T);
+	for(int kase=1;kase<=T;kase++)
+	{
+		scanf("%d%d",&n,&m);
+		printf("Case #%d:\n",kase);
+		for(int i=0;i<n;i++)
+			ve[i].clear();
+		int x,y;
+		for(int i=1;i<n;i++)
+		{
+			scanf("%d%d",&x,&y);
+			ve[x].push_back(y);
+			ve[y].push_back(x);
+		}
+		for(int i=0;i<n;i++)
+		{
+			scanf("%I64d",&ar[i]);
+			save[i]=ar[i];
+		}
+		cnt=0;
+		dfs(-1,0);
+		init(1,1,n);
+		int k;
+		ll t;
+		while(m--)
+		{
+			scanf("%d",&k);
+			if(k==0)
+			{
+				scanf("%d%I64d",&x,&t);
+				upd(1,pos[x],en[x],t-save[x]);
+				save[x]=t;
+			}
+			else
+			{
+				scanf("%d",&x);
+				ll ans=que(1,pos[x],en[x]);
+				printf("%I64d\n",ans);
+			}
+		}
+	}
+    return 0;
+}
