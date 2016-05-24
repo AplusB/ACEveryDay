@@ -1,0 +1,88 @@
+/* ***********************************************
+Author        :axp
+Created Time  :2016/5/24 18:07:25
+TASK		  :C.cpp
+LANG          :C++
+************************************************ */
+
+#include <iostream>
+#include <cstdio>
+#include <cstring>
+#include <algorithm>
+#include <vector>
+#include <queue>
+#include <set>
+#include <map>
+#include <string>
+#include <cmath>
+#include <cstdlib>
+#include <ctime>
+using namespace std;
+
+typedef long long ll;
+typedef pair<int,int> pii;
+const int N = 1005;
+int n;
+pii ar[N];
+ll ans;
+
+int gcd(int x,int y)
+{
+	return y==0?x:gcd(y,x%y);
+}
+
+ll sq(ll x)
+{
+	return x*x;
+}
+
+struct Edge
+{
+	ll l;
+	ll x,y;
+	Edge(pii a,pii b)
+	{
+		x=a.first-b.first;
+		y=a.second-b.second;
+		l=sq(x)+sq(y);
+		if(x<0)x=-x,y=-y;
+		if(x && y)
+		{
+			ll t=gcd(x,abs(y));
+			x/=t;
+			y/=t;
+		}
+		else
+			y=abs(y);
+	}
+};
+
+bool operator<(Edge a,Edge b)
+{
+	if(a.l!=b.l)return a.l<b.l;
+	if(a.x!=b.x)return a.x<b.x;
+	return a.y<b.y;
+}
+
+map<Edge,int> mp;
+
+int main()
+{
+    //freopen("in.txt","r",stdin);
+    //freopen("out.txt","w",stdout);
+    while(scanf("%d",&n)==1)
+	{
+		mp.clear();
+		ans=0;
+		for(int i=0;i<n;i++)
+			scanf("%d%d",&ar[i].first,&ar[i].second);
+		for(int i=0;i<n;i++)
+			for(int j=i+1;j<n;j++)
+				mp[Edge(ar[i],ar[j])]++;
+		for(map<Edge,int>::iterator it=mp.begin();it!=mp.end();it++)
+			ans+=1ll*it->second*(it->second-1)/2;
+		ans/=2;
+		printf("%I64d\n",ans);
+	}
+    return 0;
+}
