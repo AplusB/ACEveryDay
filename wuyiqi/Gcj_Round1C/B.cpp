@@ -32,7 +32,7 @@ const int MOD = (int) 1e9 + 7;
 
 int g[55][55];
 int main() {
-	freopen("B-small-practice.in", "r", stdin);
+	freopen("B-large-practice.in", "r", stdin);
 	freopen("B.out", "w", stdout);
 	int T, ca = 1;
 	scanf("%d", &T);
@@ -41,45 +41,31 @@ int main() {
 		int B; long long M;
 		cin >> B >> M;
 		memset(g, 0, sizeof(g));
-		int node = 1;
-		for (int i = 0; i < 60; i++) {
-			if (M & (1LL << i)) {
-				int pre = 1;
-				for (int j = 1; j < i; j++) {
-					g[pre][++node] = 1;
-					g[node][node + 1] = 1;
-					g[pre][node + 1] = 1;
-					pre = node + 1;
-					node++;
-				}
-				g[pre][B] = 1;
-				if (i) {
-					g[pre][++node] = 1;
-					g[node][B] = 1;
-				}
-			}
-		}
-		if (node >= B) {
-			puts("IMPOSSIBLE");
-		} else {
-			puts("POSSIBLE");
-			for (int i = 2; i <= B; i++) if(g[1][i]){
-				g[1][i] = 0;
-				int pre = 1;
-				for (int j = node + 1; j < B; j++) {
-					g[pre][j] = 1;
-					pre = j;
-				}
-				g[pre][i] = 1;
-				break;
-			}
-			for (int i = 1; i <= B; i++) {
-				for (int j = 1; j <= B; j++) {
-					printf("%d", g[i][j]);
-				}
-				puts("");
-			}
-		}
+        if(M > (1LL << B - 2)) {
+            puts("IMPOSSIBLE");
+            continue;
+        }
+        puts("POSSIBLE");
+        if(M == (1LL << B - 2)) {
+            M--;
+            g[0][B - 1] = 1;
+        }
+        for(int i = 1; i < B - 1; i++) {
+            for(int j = 0; j < i; j++) {
+                g[j][i] = 1;
+            }
+        }
+        for(int i = 1; i < B - 1; i++) {
+            if(M & (1LL << (i - 1))) {
+                g[i][B - 1] = 1;
+            }
+        }
+        for(int i = 0; i < B; i++) {
+            for(int j = 0; j < B; j++) {
+                cout << g[i][j];
+            }
+            cout << endl;
+        }
 	}
 	return 0;
 }
