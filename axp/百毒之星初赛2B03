@@ -1,0 +1,63 @@
+/* ***********************************************
+Author        :axp
+Created Time  :2016/5/22 21:49:22
+TASK		  :3.cpp
+LANG          :C++
+************************************************ */
+
+#include <iostream>
+#include <cstdio>
+#include <cstring>
+#include <algorithm>
+#include <vector>
+#include <queue>
+#include <set>
+#include <map>
+#include <string>
+#include <cmath>
+#include <cstdlib>
+#include <ctime>
+using namespace std;
+
+const int N = 3e5+10;
+const int md = 1e9+7;
+int jc[N];
+
+int mpow(int x,int k)
+{
+	int re=1;
+	while(k)
+	{
+		if(k&1)re=1ll*re*x%md;
+		x=1ll*x*x%md;
+		k>>=1;
+	}
+	return re;
+}
+
+int inv(int x)
+{
+	return mpow(x,md-2);
+}
+
+int c(int x,int y)
+{
+	return 1ll*jc[x]*inv(jc[y])%md*inv(jc[x-y])%md;
+}
+
+int main()
+{
+    //freopen("in.txt","r",stdin);
+    //freopen("out.txt","w",stdout);
+	jc[0]=1;
+	for(int i=1;i<N;i++)
+		jc[i]=1ll*jc[i-1]*i%md;
+    int n,m;
+	while(scanf("%d%d",&n,&m)==2)
+	{
+		int ans=0;
+		ans=(ans+c(n+m-4,n-2))%md;;
+		printf("%d\n",ans);
+	}
+    return 0;
+}

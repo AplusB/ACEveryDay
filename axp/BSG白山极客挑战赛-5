@@ -1,0 +1,100 @@
+/* ***********************************************
+Author        :axp
+Created Time  :2016/5/20 19:34:07
+TASK		  :4.cpp
+LANG          :C++
+************************************************ */
+
+#include <iostream>
+#include <cstdio>
+#include <cstring>
+#include <algorithm>
+#include <vector>
+#include <queue>
+#include <set>
+#include <map>
+#include <string>
+#include <cmath>
+#include <cstdlib>
+#include <ctime>
+using namespace std;
+
+typedef long long ll;
+const int N = 1e5+10;
+int n;
+ll k;
+int ar[N];
+ll tre[2][N<<1];
+int pos[N];
+
+void upd(bool b,int x,int v)
+{
+	x+=N;
+	while(x)
+	{
+		tre[b][x]+=v;
+		x-=x&-x;
+	}
+}
+
+ll que(bool b,int x)
+{
+	ll re=0;
+	x+=N;
+	while(x<(N<<1))
+	{
+		re+=tre[b][x];
+		x+=x&-x;
+	}
+	return re;
+}
+
+bool ok(int x)
+{
+	ll sum=0;
+	memset(tre,0,sizeof tre);
+	int now=0;
+	for(int i=1;i<=n;i++)
+	{
+		if(ar[i]>=x)now++;
+		else now--;
+		upd(i%2,now,1);
+	}
+	now=0;
+	for(int i=1;i<=n;i++)
+	{
+		sum+=que(i%2,now);
+		if(ar[i]>=x)now++;
+		else now--;
+		upd(i%2,now,-1);
+	}
+	//cout<<x<<' '<<sum<<endl;
+	return sum>=k;
+}
+
+bool cmp(int x,int y)
+{
+	return ar[x]<ar[y];
+}
+
+int main()
+{
+    //freopen("in.txt","r",stdin);
+    //freopen("out.txt","w",stdout);
+    scanf("%d%lld",&n,&k);
+	for(int i=1;i<=n;i++)
+	{
+		scanf("%d",&ar[i]);
+		pos[i]=i;
+	}
+	sort(pos+1,pos+n+1,cmp);
+	int l=1,r=n;
+	while(l<r)
+	{
+		int m=(l+r+1)>>1;
+		if(ok(ar[pos[m]]))l=m;
+		else r=m-1;
+	}
+	printf("%d\n",ar[pos[l]]);
+    return 0;
+}
