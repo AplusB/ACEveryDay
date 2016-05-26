@@ -5,15 +5,21 @@ int n, k;
 int Get(string s)
 {
     vector<int> pos;
+    int ret = 0, tmp = 0;
     for(int i = 0; i < n; i++) {
         if(s[i] == 'a') {
+            tmp = 0;
             pos.push_back(i);
+        } else {
+            tmp ++;
+            if(tmp > ret) {
+                ret = tmp;
+            }
         }
     }
     if(pos.size() <= k) {
         return n;
     } else {
-        int ret = 0;
         for(int i = k - 1; i < pos.size(); i++) {
             int right = n - 1;
             if(i + 1 < pos.size() ) {
