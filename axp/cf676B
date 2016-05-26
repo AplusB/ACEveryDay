@@ -1,0 +1,52 @@
+/* ***********************************************
+Author        :axp
+Created Time  :2016/5/25 23:23:39
+TASK		  :B.cpp
+LANG          :C++
+************************************************ */
+
+#include <iostream>
+#include <cstdio>
+#include <cstring>
+#include <algorithm>
+#include <vector>
+#include <queue>
+#include <set>
+#include <map>
+#include <string>
+#include <cmath>
+#include <cstdlib>
+#include <ctime>
+using namespace std;
+
+const int N = 15;
+int k;
+int n;
+int ar[N][N];
+int t;
+int ans;
+
+int main()
+{
+    //freopen("in.txt","r",stdin);
+    //freopen("out.txt","w",stdout);
+	cin>>n>>t;
+	k=1<<n;
+    ar[1][1]=k*t;
+	for(int i=1;i<=n;i++)
+		for(int j=1;j<=i;j++)
+		{
+			//cout<<i<<' '<<j<<' '<<ar[i][j]<<endl;
+			if(ar[i][j]>=k)
+			{
+				ans++;
+				ar[i][j]-=k;
+			}
+			else
+				ar[i][j]=0;
+			ar[i+1][j]+=ar[i][j]/2;
+			ar[i+1][j+1]+=ar[i][j]/2;
+		}
+	cout<<ans<<endl;
+    return 0;
+}
