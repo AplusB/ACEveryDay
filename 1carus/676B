@@ -1,0 +1,41 @@
+#include <iostream>
+#include <cstdio>
+#include <algorithm>
+#include <cstring>
+#include <cstdlib>
+#define endl '\n'
+#define max(a,b) (a > b ? a : b)
+#define min(a,b) (a < b ? a : b)
+
+using namespace std;
+
+const int MAXN = 35;
+long long dp[MAXN][MAXN];
+int n,t;
+int ans;
+
+int main()
+{
+	while(scanf("%d %d",&n,&t) == 2)
+	{
+		memset(dp,0,sizeof(dp));
+		ans = 0;
+		
+		dp[1][1] = t * 2048;
+		int i,j;
+		for(i = 1;i <= n;i++)
+		{
+			for(j = 1;j <= i;j++)
+			{
+				if(dp[i][j] < 2048)continue;
+				ans++;
+				int temp = (dp[i][j] - 2048) / 2;
+				dp[i + 1][j] += temp;
+				dp[i + 1][j + 1] += temp;
+			}
+		}
+		
+		cout << ans << endl;
+	}
+	return 0;
+}
