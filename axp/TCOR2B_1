@@ -1,0 +1,77 @@
+/* ***********************************************
+Author        :axp
+Created Time  :2016/4/12 23:05:51
+TASK		  :1.cpp
+LANG          :C++
+************************************************ */
+
+#include <iostream>
+#include <cstdio>
+#include <cstring>
+#include <algorithm>
+#include <vector>
+#include <queue>
+#include <set>
+#include <map>
+#include <string>
+#include <cmath>
+#include <cstdlib>
+#include <ctime>
+using namespace std;
+
+typedef pair<int,int> pii;
+typedef long long ll;
+const int md = 1e9+7;
+
+ll f(ll x)
+{
+	if(x<0)return 0;
+	ll re= (x*x%md*x%md-x)%md*166666668%md;
+	cout<<x<<' '<<re<<endl;
+	return re;
+}
+
+
+
+ll solve(ll a,ll b,ll c)
+{
+	ll re=0;
+	if(c>a+b)
+	{
+		re=1ll*(c-a-b)%md*a%md*b%md;
+		c=a+b;
+	}
+	if(c==a+b)
+	{
+		re+=1ll*a*b%md;
+		c--;
+	}
+	cout<<re<<endl;
+	re+=f(c);
+	re-=f(c-a);
+	re-=f(c-b);
+	return re;
+}
+
+class TriangleTriples
+{
+public:
+	int count(int a, int b, int c)
+	{
+		if(a>b)swap(a,b);
+		if(a>c)swap(a,c);
+		if(b>c)swap(b,c);
+		ll ans;
+		ans=1ll*a*b%md*c%md;
+
+		ans-=solve(a,b,c);
+		cout<<ans<<endl;
+		ans-=solve(a,c,b);
+		cout<<ans<<endl;
+		ans-=solve(b,c,a);
+		cout<<ans<<endl;
+		ans%=md;
+		while(ans<0)ans+=md;
+		return ans;
+	}
+}test;
