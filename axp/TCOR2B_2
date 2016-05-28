@@ -1,0 +1,78 @@
+/* ***********************************************
+Author        :axp
+Created Time  :2016/4/12 23:05:51
+TASK		  :1.cpp
+LANG          :C++
+************************************************ */
+
+#include <iostream>
+#include <cstdio>
+#include <cstring>
+#include <algorithm>
+#include <vector>
+#include <queue>
+#include <set>
+#include <map>
+#include <string>
+#include <cmath>
+#include <cstdlib>
+#include <ctime>
+using namespace std;
+
+typedef long long ll;
+const int N = 55;
+const int K = 3;//16;
+bool vis[N][1<<K];
+ll dp[N][1<<K];
+int cal[N][1<<K];
+int pre[N][K];
+int n;
+
+ll f(int now,int st)
+{
+	ll &re=dp[now][st];
+	if(vis[now][st])return re;
+	vis[now][st]=1;
+
+	//if(st==(1<<K)-1)return re=1;
+	for(int i=0;i<n;i++)
+		if(cal[now][st]<cal[i][st])return re=0;
+	if(st==(1<<K)-1)return re=1;
+	for(int i=0;i<K;i++)
+		if((st&(1<<i))==0)
+			re+=f(now,st|(1<<i));
+	cout<<now<<' '<<st<<' '<<re<<endl;
+	return re;
+}
+
+class FoxAndGemstone
+{
+public:
+	string isPossible(vector <string> bags)
+	{
+		n=bags.size();
+		for(int i=0;i<n;i++)
+			for(int j=0;j<bags[i].size();j++)
+			{
+				cout<<i<<' '<<j<<endl;
+
+				bags[i][j]-='A';
+				cout<<int(bags[i][j])<<endl;
+				pre[i][bags[i][j]]++;
+			}
+		for(int i=0;i<n;i++)
+			for(int j=0;j<(1<<K);j++)
+				for(int k=0;k<K;k++)
+					if(j&(1<<k))
+						cal[i][j]+=pre[i][k];
+		cout<<'#'<<endl;
+		ll sum=0;
+		for(int i=0;i<n;i++)
+			sum+=f(i,0);
+		ll tot=1;
+		for(int i=1;i<=K;i++)
+			tot*=i;
+		if(sum==tot)return "Possible";
+		else return "Impossible";
+	}
+}test;
