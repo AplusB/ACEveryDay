@@ -424,3 +424,93 @@ int main()
     printf("%d\n", bfs());
     return 0;
 }
+
+//E. The Last Fight Between Human and AI
+#include <bits/stdc++.h>
+using namespace std;
+
+int a[100500];
+int mod1 = 1e9 + 7, mod2 = 1e9 - 7;
+int main()
+{
+    int n, k;
+    int now = 0;
+    scanf("%d%d", &n, &k);
+    for(int i = 0; i <= n; ++i)
+    {
+        char str[10];
+        scanf("%s", str);
+        if(str[0] == '?')
+        {
+            a[i] = 100000000;
+            continue;
+        }
+        int t = 0;
+        int flag;
+        if(str[0] == '-')
+            flag = -1;
+        else
+            flag = 1;
+        for(int j = 0; str[j]; ++j)
+        {
+            if(isdigit(str[j]))
+                t = t * 10 + str[j] - '0';
+        }
+        a[i] = t * flag;
+        now = (now + 1) % 2;
+    }
+    if(k == 0)
+    {
+        if(a[0] > 100000)
+        {
+            if(now)
+                puts("Yes");
+            else
+                puts("No");
+        }
+        else
+        {
+            if(a[0] == 0)
+                puts("Yes");
+            else
+                puts("No");
+        }
+        return 0;
+    }
+    int sum1 = 0, sum2 = 0;
+    int i;
+    for(i = n; i >= 0; --i)
+    {
+        if(a[i] > 100000)
+            break;
+        sum1 = (sum1 * (k % mod1) % mod1 + a[i]) % mod1;
+        sum2 = (sum2 * (k % mod2) % mod2 + a[i]) % mod2;
+    }
+    if(i >= 0)
+    {
+        int cnt = 0;
+        for(i = n; i >= 0; --i)
+            if(a[i] > 100000)
+                ++cnt;
+        if(cnt & 1)
+        {
+            if(now)
+                puts("Yes");
+            else
+                puts("No");
+        }
+        else
+        {
+            if(now)
+                puts("No");
+            else
+                puts("Yes");
+        }
+        return 0;
+    }
+    if(sum1 == 0 && sum2 == 0)
+        puts("Yes");
+    else
+        puts("No");
+    return 0;
+}
