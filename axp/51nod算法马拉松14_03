@@ -1,0 +1,109 @@
+/* ***********************************************
+Author        :axp
+Created Time  :2016/5/27 23:27:38
+TASK		  :3.cpp
+LANG          :C++
+************************************************ */
+
+#include <iostream>
+#include <cstdio>
+#include <cstring>
+#include <algorithm>
+#include <vector>
+#include <queue>
+#include <set>
+#include <map>
+#include <string>
+#include <cmath>
+#include <cstdlib>
+#include <ctime>
+using namespace std;
+
+typedef long long ll;
+const int N = 1e5+10;
+const double eps=1e-13;
+int ar[N];
+ll sum[N];
+double c[N];
+int n;
+ll k;
+int tre[N];
+double id[N];
+int cnt;
+
+void upd(int x)
+{
+	while(x<=n)
+	{
+		tre[x]++;
+		x+=x&-x;
+	}
+}
+
+ll que(int x)
+{
+	ll re=0;
+	while(x)
+	{
+		re+=tre[x];
+		x-=x&-x;
+	}
+	return re;
+}
+
+int mp(double x)
+{
+	//cout<<'#'<<x<<' '<<lower_bound(id+1,id+n+1,x)-id<<endl;
+	return lower_bound(id+1,id+cnt+1,x)-id;
+
+}
+
+ll work(double x)
+{
+	ll re=0;
+	for(int i=1;i<=n;i++)
+		id[i]=c[i]=sum[i]-i*x;
+	sort(id+1,id+n+1);
+	cnt=1;
+	for(int i=2;i<=n;i++)
+	{
+		if(id[i]-id[i-1]<eps)continue;
+		id[++cnt]=id[i];
+	}
+	for(int i=1;i<=n;i++)c[i]+=eps;
+	memset(tre,0,sizeof tre);
+	for(int i=1;i<=n;i++)
+	{
+		if(c[i]>=-eps)re++;
+		re+=que(mp(c[i]));
+		upd(mp(c[i]));
+	}
+	//cout<<x<<' '<<re<<endl;
+	//for(int i=1;i<=n;i++)cout<<'@'<<i<<' '<<tre[i]<<' '<<id[i]<<endl;
+	return re;
+}
+
+int main()
+{
+    //freopen("in.txt","r",stdin);
+    //freopen("out.txt","w",stdout);
+	scanf("%d%lld",&n,&k);
+	for(int i=1;i<=n;i++)
+	{
+		scanf("%d",&ar[i]);
+		sum[i]=sum[i-1]+ar[i];
+	}
+	//cout<<work(2)<<endl;
+	//return 0;
+
+    double l=0,r=1e5;
+	while(l+1e-8<r)
+	{
+		double m=(l+r)/2;
+		//cout<<l<<' '<<r<<' '<<m<<endl;
+		if(work(m)>=k)l=m;
+		else r=m;
+	}
+	printf("%.8lf\n",l);
+    return 0;
+}
