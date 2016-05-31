@@ -1,0 +1,167 @@
+#include <cstdio>
+#include <cstring>
+#include <algorithm>
+#include <vector>
+#define CLEAR(A, X) memset(A, X, sizeof(A))
+#define REP(N) for(int i=0; i<(N); i++)
+#define REPE(N) for(int i=1; i<=(N); i++)
+#define FREAD(FN) freopen((FN), "r", stdin)
+#define pb(a) push_back(a)
+
+using namespace std;
+
+const int MAX_N = 200005;
+const int MAX_M = 2000005;
+
+struct Edge
+{
+	int v, next;
+	bool isBrg;
+	bool more;//重边
+}edges[MAX_M];
+
+int head[MAX_N], numE;
+int low[MAX_N], dfn[MAX_N], S[MAX_N], belong[MAX_N];
+int clock, topS;
+int block;
+bool inStack[MAX_N];
+int numBrg;
+
+void addEdge(int u, int v, bool isDup){
+	edges[numE].v = v;
+	edges[numE].next = head[u];
+	edges[numE].isBrg = 0;
+	edges[numE].more = isDup;//是否重边
+	head[u] = numE++;
+
+	//反向边，序号仅差1
+	edges[numE].v = u;
+	edges[numE].next = head[v];
+	edges[numE].isBrg = 0;
+	edges[numE].more = isDup;
+	head[v] =numE++;
+}
+
+void bcc(int u, int p, bool isDup){
+	low[u] = dfn[u] = ++clock;
+	S[topS++] = u;
+	inStack[u] = 1;
+	for(int i=head[u]; i != -1; i = edges[i].next){
+		int v = edges[i].v;
+		if(v == p && (!isDup)) continue;//parent and no duplicate
+		if(!dfn[v]){//tree
+			bcc(v, u, edges[i].more);
+			low[u] = min(low[u], low[v]);
+			if(low[v] > dfn[u]){//bridge
+				numBrg++;
+				edges[i].isBrg = 1;
+				edges[i^1].isBrg = 1;
+			}
+		}else if(inStack[v])//backward or parent
+			low[u] = min(low[u], dfn[v]);//include parent
+	}
+	if(low[u] == dfn[u]){//new bcc
+		block++;
+		int t;
+		do{
+			t = S[--topS];
+			inStack[t] = 0;
+			belong[t] = block;
+		}while(t != u);
+	}
+}
+
+void init(){
+	numE = 0;
+	numBrg = 0;
+	CLEAR(head, -1);
+	CLEAR(low, 0); CLEAR(dfn, 0); 
+	CLEAR(inStack, 0);
+	CLEAR(belong, 0);
+	clock = block = topS = 0;
+}
+
+vector<int> G[MAX_N];//缩点后的新图
+int dep[MAX_N];
+
+void dfs(int u){
+	for(int i=0; i<G[u].size(); i++){
+		int v = G[u][i];
+		if(dep[v] == -1){
+			dep[v] = dep[u]+1;
+			dfs(v);
+		}
+	}
+}
+
+int n, m;
+struct Node
+{
+	int u, v;
+}nodes[MAX_M];
+bool cmp(Node a, Node b){
+	if(a.u == b.u) return a.v < b.v;
+	return a.u < b.u;
+}
+bool same(Node a, Node b){
+	if(a.u == b.u && a.v == b.v) return true;
+	return false;
+}
+
+int main()
+{
+	FREAD("4612.txt");
+	while(~scanf("%d%d", &n, &m) && n && m){
+		init();
+		for(int i=0; i<m; i++){
+			int u, v;
+			scanf("%d%d", &u, &v);
+			if(u > v) swap(u, v);
+			nodes[i].u = u; nodes[i].v = v;
+		}
+		sort(nodes, nodes+m, cmp);//将重边聚到一起
+		int cur = 0, i = 1;
+		int flagDup = 0;
+		while(cur < m){
+			while(i<m && same(nodes[cur], nodes[i])){
+				flagDup = 1;//与cur重
+				i++;
+			}
+			if(flagDup) addEdge(nodes[cur].u, nodes[cur].v, 1);
+			else addEdge(nodes[cur].u, nodes[cur].v, 0);
+			//printf("add edge %d %d\n", nodes[cur].u, nodes[cur].v);
+			flagDup = 0;
+			cur = i++;
+		}
+		
+		bcc(1, 0, 0);//0->1虚拟边
+		REPE(block) G[i].clear();//block个节点的图
+		REPE(n){//以block为编号,[1,block]建新图
+			for(int j=head[i]; j!=-1; j=edges[j].next){
+				if(edges[j].isBrg){
+					int u = i;
+					int v = edges[j].v;
+					G[belong[u]].pb(belong[v]);//缩点
+				}
+			}
+		}
+		CLEAR(dep, -1);
+		dep[1] = 0;//以1为根
+		dfs(1);
+		int deepest = 1, maxDep = -1;
+		REPE(block){//找到最深的
+			if(dep[i] > dep[deepest]){
+				maxDep = dep[deepest];
+				deepest = i;
+			}
+		}
+		CLEAR(dep, -1);
+		dep[deepest] = 0;//以deepest为根
+		dfs(deepest);
+		int len = 0;//树的直径
+		REPE(block) len = max(len, dep[i]);
+
+		printf("%d\n", numBrg - len);
+	}
+	return 0;
+}
