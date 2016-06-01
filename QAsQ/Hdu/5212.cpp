@@ -4,12 +4,13 @@
 #include<cstdio>
 #include<algorithm>
 using namespace std;
+#define LL long long
 
 const int maxn = 11234;
 const int mod = 10007;
 
 vector<int> fac[maxn];
-int mu[maxn];
+LL mu[maxn];
 
 void init(){
     memset(mu,0,sizeof(mu));
@@ -20,12 +21,9 @@ void init(){
             if(j!=i) mu[j] -= mu[i];
         }
     }
-    for(int i=1;i<10;i++){
-        printf("%d\n",mu[i]);
-    }
 }
 
-int cnt[maxn];
+LL cnt[maxn];
 
 int main(){
     init();
@@ -39,19 +37,16 @@ int main(){
                 cnt[*it]++;
             }
         }
-        int ret = 0;
+        LL ret = 0;
         for(int i=1;i<maxn;i++){
-            int tim = 0;
+            LL tim = 0;
             for(int j=i;j<maxn;j+=i){
-                (tim += mu[j/i]*cnt[j] ) %= mod;
+                (tim += mu[j/i]*(cnt[j]*cnt[j])) %= mod;
             }
             ret += tim * i % mod * (i-1);
             ret %= mod;
-            if(i<10){
-                printf("i = %d tim = %d\n",i,tim);
-            }
         }
-        printf("%d\n",ret);
+        printf("%I64d\n",ret);
     }
     return 0;
 }
