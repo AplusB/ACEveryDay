@@ -1,0 +1,63 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+const int N  =55;
+int n;
+int dp[N/2][N/2][N*10];
+int pre[N];
+int pos[N];
+vector<int> a,b;
+
+bool cmp(int x,int y)
+{
+	return a[x]*b[y]>a[y]*b[x];
+}
+
+void f(int &x,int y)
+{
+	x=max(x,y);
+}
+
+class Moneymanager
+{
+public:
+	int getbest(vector <int> A, vector <int> B, int X)
+	{
+		n=A.size();
+		for(int i=0;i<n;i++)
+			pos[i]=i;
+		a=A;
+		b=B;
+		sort(pos,pos+n,cmp);
+		for(int i=0;i<n;i++)
+		{
+			a[i]=A[pos[i]],b[i]=B[pos[i]];
+			//cout<<a[i]<<' '<<b[i]<<endl;
+		}
+		for(int i=n-1;i>=0;i--)
+			pre[i]=pre[i+1]+b[i];
+		int ans=0;
+		for(int sum=n/2;sum<=min(n*5,pre[0]);sum++)
+		{
+			memset(dp,-1,sizeof dp);
+			dp[n/2][n/2][0]=X*(pre[0]-sum);
+			for(int num=n;num>0;num--)
+			{
+				for(int l=0;l<=min(num,n/2);l++)
+				{
+					int r=num-l;
+					for(int now=0;now<=n*10;now++)
+					{
+						int &ret=dp[l][r][now];
+						if(ret==-1)continue;
+						if(l)f(dp[l-1][r][now+b[num-1]],ret+(now+b[num-1]+pre[0]-sum)*a[num-1]);
+						if(r)f(dp[l][r-1][now],ret+(pre[num-1]-now)*a[num-1]);
+					}
+				}
+			}
+			cout<<sum<<' '<<dp[0][0][sum]<<endl;
+			f(ans,dp[0][0][sum]);
+		}
+		return ans;
+	}
+};
