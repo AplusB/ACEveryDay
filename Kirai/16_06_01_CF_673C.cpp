@@ -68,20 +68,38 @@ typedef vector<LL> vl;
 typedef vector<vl> vvl;
 typedef vector<bool> vb;
 
-const int maxn = 100100;
-int n, m;
+const int maxn = 5050;
+int n;
+int t[maxn];
+int vis[maxn];
+int cnt[maxn];
 
 int main() {
 	// FRead();
-	int u, v;
-	Rint(n); Rint(m);
-	int l = 1, r = n;
-	Rep(i, m) {
-		Rint(u); Rint(v);
-		if(u > v) swap(u, v);
-		l = max(u, l); r = min(v, r);
+	while(~Rint(n)) {
+		Cls(vis); Cls(cnt);
+		For(i, 1, n+1) Rint(t[i]);
+		For(i, 1, n+1) {
+			int curmax = 0, pos; Cls(vis);
+			curmax = ++vis[t[i]];
+			pos = t[i];
+			cnt[pos]++;
+			For(j, i+1, n+1) {
+				vis[t[j]]++;
+				if(curmax < vis[t[j]]) {
+					curmax = vis[t[j]];
+					pos = t[j];
+					cnt[pos]++;
+				}
+				else if(curmax == vis[t[j]]) {
+					pos = min(pos, t[j]);
+					cnt[pos]++;
+				}
+				else cnt[pos]++;
+			}
+		}
+		For(i, 1, n+1) printf("%d ", cnt[i]);
+		printf("\n");
 	}
-	if(r - l < 0) printf("0\n");
-	else printf("%d\n", r-l);
 	RT 0;
 }
