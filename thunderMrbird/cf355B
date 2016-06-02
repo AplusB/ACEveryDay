@@ -1,0 +1,24 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+ll m,n;
+ll a[100005];
+int main()
+{
+        ll h,k,s=0,ans=0;
+        scanf("%lld %lld %lld",&n,&h,&k);
+        for(int i=0;i<n;i++)
+        {
+                scanf("%lld",a+i);
+        }
+        for(int i=0;i<n;i++)
+        {
+                if(s+a[i]>h) {ans++; s=0;}
+                s+=a[i];
+             ans+=s/k;
+             s%=k;
+        }
+        if(s!=0) ans++;
+        printf("%lld\n",ans);
+        return 0;
+}
