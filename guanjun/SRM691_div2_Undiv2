@@ -1,0 +1,31 @@
+#include <cstdio>
+#include <cmath>
+#include <cstring>
+#include <ctime>
+#include <iostream>
+#include <algorithm>
+#include <set>
+#include <vector>
+#include <sstream>
+#include <typeinfo>
+#include <fstream>
+#define ll long long
+using namespace std;
+
+class Undiv2 {
+    public:
+	ll lcm(ll a,ll b){
+		return a*b/__gcd(a,b);
+	}
+    long long getsum(int n) {
+		ll ans=0;
+		for(int x=1;x<=30;x++){
+			for(int y=x+1;y<=30;y++){
+				ll m=1;
+				for(int i=1;i<=y;i++)if(i!=x&&i!=y)m=lcm(m,i);//不包括x,y
+				ans+=y*(n/m-n/lcm(m,x)-n/lcm(m,y)+n/lcm(lcm(x,y),m));
+			}
+		}
+        return ans;
+    }
+};
