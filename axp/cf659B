@@ -1,0 +1,48 @@
+/* ***********************************************
+Author        :axp
+Created Time  :2016/6/2 23:16:11
+TASK		  :B.cpp
+LANG          :C++
+************************************************ */
+
+#include <iostream>
+#include <cstdio>
+#include <cstring>
+#include <algorithm>
+#include <vector>
+#include <queue>
+#include <set>
+#include <map>
+#include <string>
+#include <cmath>
+#include <cstdlib>
+#include <ctime>
+using namespace std;
+
+typedef pair<int,string> psi;
+const int N = 1e4+10;
+vector<psi> ve[N];
+int n,m;
+
+int main()
+{
+    //freopen("in.txt","r",stdin);
+    //freopen("out.txt","w",stdout);
+    cin>>n>>m;
+	while(n--)
+	{
+		psi p;
+		int x;
+		cin>>p.second>>x>>p.first;
+		ve[x].push_back(p);
+	}
+	for(int i=1;i<=m;i++)
+	{
+		sort(ve[i].begin(),ve[i].end());
+		if(ve[i].size()>=3 && ve[i][ve[i].size()-2].first==ve[i][ve[i].size()-3].first)
+			puts("?");
+		else
+			cout<<ve[i][ve[i].size()-1].second<<' '<<ve[i][ve[i].size()-2].second<<endl;
+	}
+    return 0;
+}
