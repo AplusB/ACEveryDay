@@ -1,0 +1,33 @@
+/* ***********************************************
+Author        :axp
+Created Time  :2016/6/3 21:02:03
+TASK		  :A.cpp
+LANG          :C++
+************************************************ */
+
+#include <iostream>
+#include <cstdio>
+#include <cstring>
+#include <algorithm>
+#include <vector>
+#include <queue>
+#include <set>
+#include <map>
+#include <string>
+#include <cmath>
+#include <cstdlib>
+#include <ctime>
+using namespace std;
+
+int n,a,b;
+
+int main()
+{
+    //freopen("in.txt","r",stdin);
+    //freopen("out.txt","w",stdout);
+    cin>>n>>a>>b;
+	a=(a+b)%n;
+	if(a<=0)a+=n;
+	cout<<a<<endl;
+    return 0;
+}
