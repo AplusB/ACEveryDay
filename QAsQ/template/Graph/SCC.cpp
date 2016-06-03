@@ -13,6 +13,7 @@ void init(int n){
         S.pop();
     memset(dfn,-1,sizeof(dfn));
     memset(low,-1,sizeof(low));
+    memset(bel,-1,sizeof(bel));
     _cnt = 1;
 }
 
