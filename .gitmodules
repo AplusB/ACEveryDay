@@ -1,0 +1,3 @@
+[submodule "eggeek/topcoder"]
+	path = eggeek/topcoder
+	url = https://github.com/eggeek/topcoder.git
