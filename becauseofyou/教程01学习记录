@@ -1,0 +1,8 @@
+https://docs.djangoproject.com/en/1.9/intro/tutorial01/
+
+搭建好django 环境，生成一个polls　app,在app里面新建一个views.py，有一个函数为index 返回一个httpresponse
+
+在app内部有一个urls.py文件，可以设定一些url patterns，绑定到views里面的index函数
+
+在外面根目录下也有一个urls.py,同样可以设定一些url patterns，可以绑定各种app内部的urls.py，来访问app里面的url
+
