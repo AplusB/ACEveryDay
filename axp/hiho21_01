@@ -1,0 +1,50 @@
+/* ***********************************************
+Author        :axp
+Created Time  :2016/6/5 19:07:01
+TASK		  :1.cpp
+LANG          :C++
+************************************************ */
+
+#include <iostream>
+#include <cstdio>
+#include <cstring>
+#include <algorithm>
+#include <vector>
+#include <queue>
+#include <set>
+#include <map>
+#include <string>
+#include <cmath>
+#include <cstdlib>
+#include <ctime>
+using namespace std;
+
+const int N = 105;
+char ch[N];
+int n;
+int ans;
+int se=1<<30;
+
+int main()
+{
+    //freopen("in.txt","r",stdin);
+    //freopen("out.txt","w",stdout);
+    scanf("%d",&n);
+	for(int i=0;i<n;i++)
+	{
+		scanf("%s",ch);
+		int now=0;
+		int ad=0;
+		while(ch[now] && ch[now]=='x')now++;
+		while(ch[now])
+		{
+			if(ch[now]=='x')ad++;
+			now++;
+			ans++;
+		}
+		se=min(se,ad);
+	}
+	if(se!=1<<30)ans+=se;
+	printf("%d\n",ans);
+    return 0;
+}
