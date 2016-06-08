@@ -1,0 +1,51 @@
+/* ***********************************************
+Author        :axp
+Created Time  :2016/6/7 22:05:38
+TASK		  :1183.cpp
+LANG          :C++
+************************************************ */
+
+#include <iostream>
+#include <cstdio>
+#include <cstring>
+#include <algorithm>
+#include <vector>
+#include <queue>
+#include <set>
+#include <map>
+#include <string>
+#include <cmath>
+#include <cstdlib>
+#include <ctime>
+using namespace std;
+
+const int N = 1000+10;
+int dp[N][N];
+bool vis[N][N];
+char ch[2][N];
+int n,m;
+
+int f(int x,int y)
+{
+	int &re=dp[x][y];
+	if(vis[x][y])return re;
+	vis[x][y]=1;
+	if(x>n || y>m)return  re=max(n+1-x,m+1-y);
+	re=f(x+1,y+1);
+	if(ch[0][x]!=ch[1][y])re++;
+	re=min(re,1+f(x,y+1));
+	re=min(re,1+f(x+1,y));
+	return re;
+}
+
+int main()
+{
+    //freopen("in.txt","r",stdin);
+    //freopen("out.txt","w",stdout);
+	scanf("%s%s",ch[0]+1,ch[1]+1);
+	n=strlen(ch[0]+1);
+	m=strlen(ch[1]+1);
+	int ans=f(1,1);
+	printf("%d\n",ans);
+    return 0;
+}
