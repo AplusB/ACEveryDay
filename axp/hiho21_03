@@ -1,0 +1,77 @@
+/* ***********************************************
+Author        :axp
+Created Time  :2016/6/6 0:14:51
+TASK		  :3.cpp
+LANG          :C++
+************************************************ */
+
+#include <iostream>
+#include <cstdio>
+#include <cstring>
+#include <algorithm>
+#include <vector>
+#include <queue>
+#include <set>
+#include <map>
+#include <string>
+#include <cmath>
+#include <cstdlib>
+#include <ctime>
+using namespace std;
+
+const int N = 25;
+const int md = 1e9+7;
+int n;
+int ar[N];
+int dp[1<<N];
+int mp[N];
+int ans;
+int save[N];
+int cal[1<<N];
+int mx;
+
+int main()
+{
+    //freopen("in.txt","r",stdin);
+    //freopen("out.txt","w",stdout);
+    scanf("%d",&n);
+	for(int i=0;i<n;i++)
+	{
+		scanf("%d",&ar[i]);
+		mp[--ar[i]]=i;
+	}
+	for(int st=0;st<(1<<n);st++)
+	{
+		int t=st;
+		while(t)
+		{
+			cal[st]++;
+			t-=t&-t;
+		}
+	}
+	mx=1<<n;
+	for(int i=1;i<=n;i++)
+		save[i]=save[i-1]|(1<<mp[n-i]);
+	dp[0]=1;
+
+	for(int st=0;st<(1<<n);st++)
+	{
+		bool ok=1;
+		int v=cal[st];
+		for(int i=1;i<=n;i++)
+			if(cal[ st&((1<<i)-1) ] > cal[ save[v]&((1<<i)-1) ])
+				ok=0;
+		if(ok==0)continue;
+		for(int i=0;i<n;i++)
+		{
+			if(st&(1<<i))continue;
+			//printf("%d %d\n",(st|(1<<i)),save[v+1]);
+			dp[st|(1<<i)]+=dp[st];
+			dp[st|(1<<i)]%=md;
+		}
+		if(dp[st]==0)printf("%d %d %d\n",st,dp[st],save[v+1]);
+	}
+	ans=dp[(1<<n)-1];
+	printf("%d\n",ans);
+    return 0;
+}
