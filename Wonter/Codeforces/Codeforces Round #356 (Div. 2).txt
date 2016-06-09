@@ -1,0 +1,124 @@
+//A - Bear and Five Cards	
+#include <bits/stdc++.h>
+using namespace std;
+
+int cnt[200];
+int main()
+{
+    int sum = 0;
+    for(int i = 1;i <= 5;++i)
+    {
+        int x;
+        scanf("%d", &x);
+        ++cnt[x];
+        sum += x;
+    }
+    int ans = sum;
+    for(int i = 100;i >= 1;--i)
+        if(cnt[i] >= 2)
+            ans = min(ans, sum - i * min(cnt[i], 3));
+    printf("%d\n", ans);
+    return 0;
+}
+
+//B - Bear and Finding Criminals	
+#include <bits/stdc++.h>
+using namespace std;
+
+int arr[200];
+int main()
+{
+    int n, a;
+    scanf("%d%d", &n, &a);
+    for(int i = 1;i <= n;++i)
+        scanf("%d", &arr[i]);
+    int ans = 0;
+    if(arr[a])
+        ++ans;
+    for(int dis = 1;dis <= n;++dis)
+    {
+        int cnt = 0;
+        int city = 0;
+        int left = a - dis;
+        int right = a + dis;
+        if(left >= 1)
+            ++city;
+        if(right <= n)
+            ++city;
+        if(left >= 1 && arr[left])
+            ++cnt;
+        if(right <= n && arr[right])
+            ++cnt;
+        if(cnt == 2)
+            ans += 2;
+        if(cnt == 1 && city == 1)
+            ++ans;
+    }
+    printf("%d\n", ans);
+    return 0;
+}
+
+//C - Bear and Prime 100	
+#include <bits/stdc++.h>
+using namespace std;
+
+int f[] = {4, 9, 25, 49};
+int arr[] = {2,3,5,7,11,13,17,19,23,29,31,37,41,43,47,53,59,61,67,71,73,79,83,89,97};
+int main()
+{
+    int cnt = 0;
+    for(int i = 0;i < 4;++i)
+    {
+        printf("%d\n", f[i]);
+        fflush(stdout);
+        char str[100];
+        scanf("%s", str);
+        if(tolower(str[0]) == 'y')
+            cnt = 50000;
+    }
+    for(int i = 0;i < 16;++i)
+    {
+        printf("%d\n", arr[i]);
+        fflush(stdout);
+        char str[100];
+        scanf("%s", str);
+        if(tolower(str[0]) == 'y')
+            ++cnt;
+    }
+    if(cnt <= 1)
+        printf("prime\n");
+    else
+        printf("composite\n");
+    fflush(stdout);
+    return 0;
+}
+
+//D - Bear and Tower of Cubes	
+#include <bits/stdc++.h>
+using namespace std;
+
+typedef __int64 LL;
+pair<int,LL> ans;
+LL Cube(int i) {return static_cast<LL>(i)*i*i;}
+void dfs(LL m, int step, LL x)
+{
+    if(m == 0)
+    {
+        ans = max(ans, pair<int,LL>(step, x));
+        return ;
+    }
+    int a = 1;
+    while(Cube(a + 1) <= m) ++a;
+    dfs(m - Cube(a), step + 1, x + Cube(a));
+    if(a - 1 > 0)
+        dfs(Cube(a) - 1 - Cube(a - 1), step + 1, x + Cube(a - 1));
+}
+int main()
+{
+    ans.first = ans.second = 0;
+    LL m;
+    scanf("%I64d", &m);
+    dfs(m, 0, 0);
+    printf("%d %I64d\n", ans.first, ans.second);
+    return 0;
+}
