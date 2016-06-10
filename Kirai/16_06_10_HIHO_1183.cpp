@@ -156,9 +156,8 @@ int main() {
 				printf("%d ", i);
 			}
 		}
-		if(!flag) printf("Null\n");
+		if(!flag) printf("Null");
 		printf("\n");
-
 		Rep(i, bridge.size()) {
 			u = edge[bridge[i]].u;
 			v = edge[bridge[i]].v;
