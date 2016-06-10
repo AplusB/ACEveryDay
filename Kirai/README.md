@@ -1,1 +1,0 @@
-# Kirai的博客：http://www.cnblogs.com/VincentX/
