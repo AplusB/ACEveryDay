@@ -11,19 +11,6 @@ struct Ask
 };
 
 Ask ask[maxn];
-int unit;
-
-bool cmpmo(Ask a,Ask b)
-{
-    if(a.l / unit != b.l / unit)
-        return a.l < b.l;
-    return a.r < b.r;
-}
-
-bool cmpid(Ask a,Ask b)
-{
-    return a.id < b.id;
-}
 
 LL renew(LL ans,int pos,bool adder)
 {
@@ -42,12 +29,16 @@ LL renew(LL ans,int pos,bool adder)
 int main()
 {
     scanf("%d %d",&n,&m);
-    unit = (int)sqrt(n*1.0);
+    int unit = (int)sqrt(n*1.0);
     for(int i=0; i<m; i++)
     {
         ask[i].init(i);
     }
-    sort(ask,ask+m,cmpmo);
+    sort(ask
+         ,ask+m
+         ,[=](Ask a,Ask b)
+         {return a.l/unit!=b.l/unit?a.l<b.l:a.r<b.r;}
+        );
     LL ans = zeroAns;
     for(int i=ask[0].l; i<=ask[0].r; i++)
     {
@@ -67,7 +58,7 @@ int main()
             ans = renew(ans,id,st==ask[i].l);
         ask[i].ans = ans;
     }
-    sort(ask,ask+m,cmpid);
+    sort(ask,ask+m,[](Ask a,Ask b){return a.id < b.id});
     for(int i=0; i<m; i++)
         printf(ask[i].ans);
     return 0;
