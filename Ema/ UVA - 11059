@@ -1,0 +1,35 @@
+#include <iostream>
+#include <cstdio>
+#include <cstring>
+#include <string>
+#include <algorithm>
+#include <map>
+#include <queue>
+#include <cmath>
+
+using namespace std;
+const int maxn = 20 + 5;
+
+int main()
+{
+    int num = 0, n, a[maxn];
+    long long p = 1, pmax = 0;
+    while (cin >> n) {
+        memset (a, 0, sizeof(a));
+        pmax = 0;
+        for (int i = 0; i < n; i++) {
+            cin >> a[i];
+        }
+        for (int i = 0; i < n; i++) {
+            p = 1;
+            for (int j = i; j < n; j++) {
+                p *= a[j];
+                if (p > pmax) {
+                    pmax = p;
+                }
+            }
+        }
+        printf ("Case #%d: The maximum product is %lld.\n\n", ++num, pmax);
+    }
+    return 0;
+}
