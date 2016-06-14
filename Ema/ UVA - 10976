@@ -1,0 +1,36 @@
+#include <iostream>
+#include <cstdio>
+#include <cstring>
+#include <string>
+#include <algorithm>
+#include <map>
+#include <queue>
+#include <cmath>
+
+using namespace std;
+const int maxn = 10000 + 5;
+
+int main()
+{
+    int k;
+    while (cin >> k) {
+        int num = 0, x[maxn], y[maxn], xn, yn;
+        memset (x, 0, sizeof(x));
+        memset (y, 0, sizeof(y));
+        for (int i = k + 1; i <= 2 * k; i++) {
+            yn = i;
+            xn = k * yn / (yn - k);
+            //printf ("%d %d\n", xn, yn);
+            if (k * yn == xn * yn - xn * k) {
+                x[num] = xn;
+                y[num] = yn;
+                num++;
+            }
+        }
+        printf ("%d\n", num);
+        for (int i = 0; i < num; i++) {
+            printf ("1/%d = 1/%d + 1/%d\n", k, x[i], y[i]);
+        }
+    }
+    return 0;
+}
