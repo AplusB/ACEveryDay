@@ -1,0 +1,10 @@
+fun main(args: Array<String>) {
+    val (x, y, z) = readLine()!!.split(' ').map(String::toInt)
+    ac(x,y,z)
+}
+
+fun ac(a: Int, b: Int, c: Int){ 
+    if(b<0||c<0||b>a||c>a) println(2)
+    else if(b==a||b==0||c==a||c==0) println(1)
+    else println(0)
+}
