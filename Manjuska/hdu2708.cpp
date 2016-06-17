@@ -1,7 +1,7 @@
 # include <stdio.h>
 # include <string.h>
 
-
+//恭祝胖巨和雨巨幸福的走到婚姻的殿堂
 int tab[300] ;
 char str[100] ;
 int max_tab[300] ;
