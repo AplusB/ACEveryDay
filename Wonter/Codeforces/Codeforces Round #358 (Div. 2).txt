@@ -1,0 +1,146 @@
+//A. Alyona and Numbers
+#include <bits/stdc++.h>
+using namespace std;
+
+int main()
+{
+    __int64 n, m;
+    __int64 ans = 0;
+    scanf("%I64d%I64d", &n, &m);
+    for(__int64 i = 1;i <= n;++i)
+    {
+        __int64 t = i % 5;
+        if(m - 5 + t >= 0)
+            ans += (m - 5 + t) / 5 + 1;
+    }
+    printf("%I64d\n", ans);
+    return 0;
+}
+
+//B - Alyona and Mex  
+#include <bits/stdc++.h>
+using namespace std;
+
+__int64 a[100500];
+int main()
+{
+    __int64 n;
+    scanf("%I64d", &n);
+    for(__int64 i = 1;i <= n;++i)
+        scanf("%I64d", &a[i]);
+    sort(a + 1, a + 1 + n);
+    __int64 ans = 1;
+    for(__int64 i = 1;i <= n;++i)
+    {
+        if(a[i] < ans)
+            continue;
+        if(a[i] >= ans)
+            ++ans;
+    }
+    printf("%I64d\n", ans);
+    return 0;
+}
+
+//C - Alyona and the Tree  
+#include <bits/stdc++.h>
+using namespace std;
+
+typedef pair<__int64,__int64> P;
+__int64 a[100050];
+vector<P> edge[100050];
+__int64 ans = 0;
+__int64 siz[100050];
+void dfs1(__int64 cur, __int64 pre)
+{
+    siz[cur] = 1;
+    for(__int64 i = 0; i < edge[cur].size(); ++i)
+    {
+        __int64 next = edge[cur][i].first;
+        if(next != pre)
+        {
+            dfs1(next, cur);
+            siz[cur] += siz[next];
+        }
+    }
+}
+void dfs2(__int64 cur, __int64 pre, __int64 vis)
+{
+    if(vis > a[cur])
+    {
+        ans += siz[cur];
+        return ;
+    }
+    for(__int64 i = 0; i < edge[cur].size(); ++i)
+    {
+        __int64 next = edge[cur][i].first;
+        if(next != pre)
+            dfs2(next, cur, max(vis + edge[cur][i].second, edge[cur][i].second));
+    }
+}
+int main()
+{
+    __int64 n;
+    scanf("%I64d", &n);
+    for(__int64 i = 1; i <= n; ++i)
+        scanf("%I64d", &a[i]);
+    for(__int64 i = 1; i <= n - 1; ++i)
+    {
+        __int64 p, c;
+        scanf("%I64d%I64d", &p, &c);
+        edge[i + 1].push_back(P(p, c));
+        edge[p].push_back(P(i + 1, c));
+    }
+    dfs1(1, -1);
+    dfs2(1, -1, -1000000010);
+    printf("%I64d\n", ans);
+    return 0;
+}
+
+//D - Alyona and Strings  
+#include <bits/stdc++.h>
+using namespace std;
+
+int dp[1010][1010][12];
+char s[1010];
+char t[1010];
+int cnt[1010][1010];
+int main()
+{
+    int n, m, k;
+    scanf("%d%d%d", &n, &m, &k);
+    scanf("%s%s", s + 1, t + 1);
+    for(int i = 1;i <= n;++i)
+    {
+        for(int j = 1;j <= m;++j)
+        {
+            if(s[i] == t[j])
+                cnt[i][j] = cnt[i - 1][j - 1] + 1;
+            else
+                cnt[i][j] = 0;
+        }
+    }
+    s[0] = '(';
+    t[0] = ')';
+    for(int i = 1; i <= n; ++i)
+    {
+        for(int j = 1; j <= m; ++j)
+        {
+            for(int l = 1; l <= k; ++l)
+            {
+                if(min(i, j) < l)
+                    break;
+                if(s[i] == t[j])
+                {
+                    dp[i][j][l] = dp[i - cnt[i][j]][j - cnt[i][j]][l - 1] + cnt[i][j];
+                    dp[i][j][l] = max(dp[i][j][l], dp[i - 1][j - 1][l]);
+                    dp[i][j][l] = max(dp[i][j][l], dp[i][j - 1][l]);
+                    dp[i][j][l] = max(dp[i][j][l], dp[i - 1][j][l]);
+                }
+                else
+                    dp[i][j][l] = max(dp[i - 1][j][l], dp[i][j - 1][l]);
+            }
+        }
+    }
+    printf("%d\n", dp[n][m][k]);
+    return 0;
+}
