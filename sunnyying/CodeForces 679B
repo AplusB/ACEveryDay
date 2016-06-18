@@ -1,0 +1,42 @@
+#include <stdio.h>
+#include <string.h>
+#include <iostream>
+#include <algorithm>
+#include <vector>
+#include <queue>
+#include <set>
+#include <map>
+#include <string>
+#include <math.h>
+#include <stdlib.h>
+#define N 1250010
+#define INF 0x3f3f3f3f
+#define endl '\n'
+#define ll long long
+#define mod 1000000007
+using namespace std;
+ll ans,sum;
+ll f(ll x) {return x*x*x;}
+void dfs(ll t,ll x,ll res)
+{
+    if(x==0)
+    {
+        if(t>ans) ans=t,sum=res;
+        else if(t==ans&&res>sum) res=sum;
+        return;
+    }
+    ll xx;
+    for(ll i=1;i<=x;i++) if(f(i+1)>x) {xx=i;break;}
+    dfs(t+1,x-f(xx),res+f(xx));
+    dfs(t+1,f(xx)-1-f(xx-1),res+f(xx-1));
+}
+int main()
+{
+ //   freopen("in.in","r",stdin);
+   // freopen("out.out","w",stdout);
+    ll m;
+    cin>>m;
+    dfs(0,m,0);
+    cout<<ans<<" "<<sum<<endl;
+    return 0;
+}
