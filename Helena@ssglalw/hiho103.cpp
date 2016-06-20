@@ -1,5 +1,6 @@
 #include <cstdio>
 #include <cstdlib>
+#include <ctime>
 #define FREAD(filename) freopen((filename), "r", stdin)
 using namespace std;
 const int MAX_N = 100005;
@@ -10,8 +11,12 @@ struct Node
 	int rank;
 	Node *l, *r, *p;
 	Node():l(NULL), r(NULL), p(NULL){}
-	Node(int kk):k(kk), w(rand()), l(NULL), r(NULL), p(NULL){}
-	Node(int kk, Node* pp):k(kk), w(rand()), l(NULL), r(NULL), p(pp){}
+	Node(int kk):k(kk), w(rand()), l(NULL), r(NULL), p(NULL){
+		//printf("%d w=%d\n", k, w);
+	}
+	Node(int kk, Node* pp):k(kk), w(rand()), l(NULL), r(NULL), p(pp){
+		//printf("%d w=%d\n", k, w);
+	}
 };
 struct Treap
 {
@@ -19,8 +24,44 @@ struct Treap
 	Node* _hot;
 	Treap():root(NULL), _hot(root){}
 	Treap(int k):root(new Node(k)){_hot = root;}
+	void zig(Node* cur){
+		Node* v = cur->l;
+		Node* g = cur->p;
+
+		if(g != NULL){
+			//祖先g与v连接
+			v->p = g;
+			cur == g->l ? g->l = v : g->r = v;
+		}
+		//v与cur孩子过继
+		cur->l = v->r;
+		if(cur->l != NULL) cur->l->p = cur;
+
+		//v与cur角色转换
+		cur->p = v;
+		v->r = cur;
+		if(cur == root) root = v;
+	}
+	void zag(Node* cur){
+		Node* v = cur->r;
+		Node* g = cur->p;
+		//printf("g=%d cur=%d v=%d\n", g->k, cur->k, v->k);
+		if(g != NULL){
+			v->p = g;
+			cur == g->l ? g->l = v : g->r = v;
+		}
+
+		cur->r = v->l;
+		if(cur->r != NULL) cur->r->p = cur;
+
+		cur->p = v;
+		v->l = cur;
+		if(cur == root) root = v;
+	}
 	void rotate(Node* cur){
-		
+		Node* p = cur->p;
+		p->l == cur ? zig(p) : zag(p);
+		//printf("rotate %d\n", cur->k);
 	}
 	void insert(Node* cur, int k){//往cur子树中插入关键码为k的节点
 		if(cur == NULL){
@@ -28,7 +69,7 @@ struct Treap
 			k < _hot->k ? _hot->l = cur : _hot->r = cur;
 			//printf("%d inserted as %d's %s child\n", k, _hot->k, cur == _hot->l ? "left" : "right");
 			_hot = cur;
-			rotate(cur);
+			if(cur->p->w > cur->w) rotate(cur);
 			return ;
 		}
 		_hot = cur;
@@ -64,6 +105,7 @@ int main()
 {
 	int n, k;
 	char c;
+	srand(time(0));
 	FREAD("hiho103.txt");
 	scanf("%d", &n);
 	getchar();//回车
