@@ -80,7 +80,7 @@ struct Treap
 		while(cur->r != NULL) cur = cur->r;
 		return cur;
 	}
-	Node* succ(Node* cur){
+	Node* prev(Node* cur){
 		if(cur->l != NULL) return getMax(cur->l);
 		Node* p = cur->p;
 		while(p != NULL && cur == p->l){//沿右侧链上行
@@ -92,7 +92,7 @@ struct Treap
 	int search(Node* cur, int k){//在cur子树中不超过k的最后一个元素
 		if(cur == NULL){//到达底层外部节点，即查找失败
 			//printf("try %d\n", _hot->k);
-			return _hot->k < k ? _hot->k : succ(_hot)->k;//返回其直接前驱
+			return _hot->k < k ? _hot->k : prev(_hot)->k;//返回其直接前驱
 		}
 		_hot = cur;
 		if(k == cur->k) return k;//三分支
