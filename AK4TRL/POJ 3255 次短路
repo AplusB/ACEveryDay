@@ -1,0 +1,69 @@
+#include<cstdio>
+#include<cstring>
+#include<iostream>
+#include<utility>
+#include<string>
+#include<vector>
+#include<algorithm>
+#include<queue>
+#include<set>
+#include<cstdlib>
+#include<cmath>
+#include<stack>
+#include<sstream>
+#define INF 0x3f3f3f3f
+using namespace std;
+const int N = 1001 ;
+int tn , n , m , k , tcase = 0 ;
+
+struct edge{
+	int to , cost ;
+	edge(){} edge(int a , int b) : to(a) , cost(b) {}
+} ;
+typedef pair<int , int> pii ;
+vector<edge> g[5005] ;
+int d[5005] , d2[5005] ;
+
+void dijkstra()
+{
+	priority_queue<pii , vector<pii> , greater<pii> > que ;
+	fill(d,d+n,INF) ;
+	fill(d2,d2+n,INF) ;
+	d[0] = 0 ;
+	que.push(pii(0,0));
+	while(!que.empty())
+	{
+		pii p = que.top() ;
+		que.pop() ;
+		int v = p.second , td = p.first ;
+		if(d2[v] < td)
+			continue ;
+		for(int i = 0 ; i < g[v].size() ; ++i)
+		{
+			edge &e = g[v][i] ;
+			int td2 = td + e.cost ;
+			if(d[e.to] > td2)
+				swap(d[e.to] , td2), que.push(pii(d[e.to] ,e.to)) ;
+			if(d2[e.to] > td2 && d[e.to] < td2)
+				d2[e.to] = td2, que.push(pii(d2[e.to] , e.to)) ;
+		}
+	}
+	cout << d2[n-1] << endl ;
+}
+int main()
+{
+#ifdef ONLINEJUDGE_AK4TRl
+	freopen("input.txt","r",stdin);
+#endif
+	cin >> n >> m ;
+	int a , b , c ;
+	for(int i = 0 ; i < m ; ++i)
+	{
+		cin >> a >> b >> c ;
+		g[a-1].push_back(edge(b - 1 , c)) ;
+		g[b-1].push_back(edge(a - 1 , c)) ;
+	}
+	dijkstra() ;
+
+	return 0;
+}
