@@ -24,7 +24,7 @@ public class Main{
 				ans=lcm(ans,x);
 			}
 			System.out.println("Case "+t+": "+ans);
-			
+			System.gc();
 		}
 	}
 
