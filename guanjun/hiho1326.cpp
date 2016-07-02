@@ -50,26 +50,22 @@ int main()
     #endif
     //freopen("out.txt","w",stdout);
     int t;
-	string s;
+	char s[maxn];
 	cin>>t;
 	while(t--){
-		cin>>s;
-		int n=s.size();
-		int ans=0;
+		scanf("%s",s+1);
+		int n=strlen(s+1);
 		int Min=INF;
-		for(int j=n-1;j>=0;j--){
-			ans=0;
-			for(int i=n-1;i>=j;i--){
-				if(s[i]!='1')ans++;
+		for(int i=0;i<=n+1;i++){
+			int ans=0;
+			for(int j=1;j<=i;j++){
+				if(s[j]!='0')ans++;
 			}
-			for(int i=j-1;i>0;i--){
-				if(s[i]!='0')ans++;
+			for(int j=i+1;j<=n;j++){
+				if(s[j]!='1')ans++;
 			}
 			Min=min(ans,Min);
 		}
-		ans=0;
-		for(int i=0;i<n;i++)if(s[i]!='0')ans++;
-		Min=min(Min,ans);
 		cout<<Min<<endl;
 	}
     return 0;
