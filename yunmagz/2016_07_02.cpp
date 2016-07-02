@@ -1,9 +1,7 @@
-/lightoj1105 - Fi Binary Number
+//lightoj1105 - Fi Binary Number
 #include<bits/stdc++.h>
 using namespace std;
-priority_queue<int, vector<int>, greater<int> >q;
-string s[100010];
-int a[100010],f[100010];
+int f[100010];
 int main(){
     f[0]=1;
     f[1]=2;
@@ -26,6 +24,32 @@ int main(){
             j--;
         }
         puts("");
+    }
+    return 0;
+}
+//lightoj1134 - Be Efficient
+#include<bits/stdc++.h>
+using namespace std;
+#define LL long long
+int dp[100010];
+int main(){
+    int t,cas=1,x;
+    cin>>t;
+    while(t--){
+        int n,m;
+        cin>>n>>m;
+        memset(dp,0,sizeof dp);
+        int sum=0;
+        LL ans=0;
+        dp[0]=1;
+        for(int i=0;i<n;i++){
+            cin>>x;
+            sum+=x;
+            sum%=m;
+            ans+=dp[sum];
+            dp[sum]++;
+        }
+        printf("Case %d: %lld\n",cas++,ans);
     }
     return 0;
 }
