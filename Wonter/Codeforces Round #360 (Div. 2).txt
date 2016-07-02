@@ -1,0 +1,176 @@
+//A - Opponents  
+#include <bits/stdc++.h>
+using namespace std;
+
+string str;
+int Check(string &s)
+{
+    for(int i = 0;i < s.length();++i)
+        if(s[i] == '0')
+        return 1;
+    return 0;
+}
+int main()
+{
+    int n, d;
+    int ans = 0;
+    int cur = 0;
+    scanf("%d%d", &n, &d);
+    for(int i = 1;i <= d;++i)
+    {
+        cin >> str;
+        if(Check(str))
+            ++cur;
+        else
+            cur = 0;
+        ans = max(ans, cur);
+    }
+    cout << ans;
+    return 0;
+}
+
+//B - Lovely Palindromes  
+#include <bits/stdc++.h>
+using namespace std;
+
+string str;
+int main()
+{
+    cin >> str;
+    cout << str;
+    reverse(str.begin(), str.end());
+    cout << str << endl;
+    return 0;
+}
+
+//C - NP-Hard Problem  
+#include <bits/stdc++.h>
+using namespace std;
+
+vector<int> edge[100005];
+vector<int> a, b;
+int f[100005];
+bool vis[100005];
+bool dfs(int cur, int s)
+{
+    f[cur] = s;
+    vis[cur] = true;
+    for(int next:edge[cur])
+    {
+        if(!vis[next] && !dfs(next, s ^ 1))
+            return false;
+        if(vis[next] && f[next] == f[cur])
+            return false;
+    }
+    return true;
+}
+int main()
+{
+    memset(f, -1, sizeof(f));
+    int n, m;
+    scanf("%d%d", &n, &m);
+    for(int i = 1; i <= m; ++i)
+    {
+        int u, v;
+        scanf("%d%d", &u, &v);
+        edge[u].push_back(v);
+        edge[v].push_back(u);
+    }
+    for(int i = 1; i <= n; ++i)
+    {
+        if(!vis[i] && !dfs(i, 0))
+        {
+            puts("-1");
+            return 0;
+        }
+    }
+    a.reserve(n + 1);
+    b.reserve(n + 1);
+    for(int i = 1;i <= n;++i)
+    {
+        if(f[i])
+            a.push_back(i);
+        else
+            b.push_back(i);
+    }
+    printf("%d\n", a.size());
+    for(int ele:a)
+        printf("%d ", ele);
+    printf("\n%d\n", b.size());
+    for(int ele:b)
+        printf("%d ", ele);
+    return 0;
+}
+
+//D - Remainders Game  
+#include <bits/stdc++.h>
+using namespace std;
+
+__int64 gcd(__int64 a, __int64 b)
+{
+    if(b == 0)
+        return a;
+    return gcd(b, a % b);
+}
+__int64 lcm(__int64 a, __int64 b)
+{
+    return a / gcd(a, b) * b;
+}
+int main()
+{
+    __int64 l = 1;
+    __int64 n, k;
+    scanf("%I64d%I64d", &n, &k);
+    for(__int64 i = 1;i <= n;++i)
+    {
+        __int64 x;
+        scanf("%I64d", &x);
+        l = lcm(l, x);
+        l %= k;
+    }
+    if(l == 0)
+        puts("Yes");
+    else
+        puts("No");
+    return 0;
+}
+
+//E - The Values You Can Make  
+#include <bits/stdc++.h>
+using namespace std;
+
+int arr[510];
+bool dp[510][510][510];
+vector<int> ans;
+int main()
+{
+    int n, k;
+    scanf("%d%d", &n, &k);
+    for(int i = 1; i <= n; ++i)
+        scanf("%d", &arr[i]);
+    dp[0][0][0] = true;
+    for(int i = 1; i <= n; ++i)
+    {
+        for(int j = 0; j <= k; ++j)
+        {
+            for(int l = 0; l <= k; ++l)
+            {
+                dp[i][j][l] |= dp[i - 1][j][l];
+                if(j >= arr[i] && l >= arr[i])
+                    dp[i][j][l] |= dp[i - 1][j - arr[i]][l - arr[i]];
+                if(j >= arr[i])
+                    dp[i][j][l] |= dp[i - 1][j - arr[i]][l];
+                /*if(l >= arr[i])
+                    dp[i][j][l] |= dp[i - 1][j][l - arr[i]];*/
+            }
+        }
+    }
+    ans.reserve(k + 1);
+    for(int i = 0; i <= k; ++i)
+        if(dp[n][k][i])
+            ans.push_back(i);
+    printf("%u\n", ans.size());
+    for(int ele:ans)
+        printf("%d ", ele);
+    return 0;
+}
