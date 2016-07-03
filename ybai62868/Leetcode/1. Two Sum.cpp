@@ -1,3 +1,4 @@
+//O(n^2)
 class Solution {
 public:
     vector<int> twoSum(vector<int>& nums, int target) {
@@ -15,6 +16,30 @@ public:
                 }
             }
             if ( flag ) break;
+        }
+        return res;
+    }
+};
+
+
+//O(n)
+
+class Solution {
+public:
+    vector<int> twoSum(vector<int>& nums, int target) {
+        vector<int>res;
+        int len = nums.size();
+        if ( len <= 1 ) return res;
+        map<int,int>MP;
+        for ( int i = 0;i < len;i++ ){
+            if ( MP.count(target-nums[i]) ){
+                res.push_back(i);
+                res.push_back(MP[target-nums[i]]);
+               // res.push_back(i);
+            }
+            else{
+                MP[nums[i]] = i;
+            }
         }
         return res;
     }
