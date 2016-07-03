@@ -1,0 +1,25 @@
+T = int(raw_input())
+
+for _t in range(T):
+    cnts = map(int, raw_input().split())
+
+    d = {}
+    for i in range(26):
+        if cnts[i] > 0:
+            d[chr(ord('a') + i)] = cnts[i]
+
+    # make str
+    s = []
+    
+    while len(d) != 0:
+        todel = []
+        for k, v in d:
+            s.append(k)
+            v -= 1
+            d[k] = v
+            if v == 0:
+                todel.append(k)
+        for k in todel:
+            del d[k]
+
+
