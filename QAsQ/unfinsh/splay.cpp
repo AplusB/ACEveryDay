@@ -44,29 +44,17 @@ int ori(int st){
 }
 
 void setc(int st,int sn,int d){
-    node[st].son[d] = sn;
+    if(st != -1){
+        node[st].son[d] = sn;
+        node[st].maintain();
+    }
     if(sn != -1) node[sn].fa = d;
 }
 
 void zg(int x){
     int d = ori(x);
     int st = node[x].fa;
-    int fd = ori(st);
-    int fa = node[st].fa;
-
-    int son = node[x].son[d^1];
-
-    setc(st,x,
-    node[st].son[d] = son, node[st].fa = x;
-    node[x].son[d^1] = st, node[x].fa = fa;
-    
-    if(son!=-1)
-        node[son].fa = st;
-    node[st].maintain();
-    node[x].maintain();
-    if(fa != -1){
-        node[fa].son[fd] = x;
-        node[fa].maintain();
-    }
+    setc(st,node[x].son[d^1],d);
+    setc(x,st,d^1);
+    setc(node[st].fa,x,ori(st));
 }
-
