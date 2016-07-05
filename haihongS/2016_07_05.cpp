@@ -30,13 +30,21 @@ int main()
 	int a,b,c;
 	while(~scanf("%d%d%d",&a,&b,&c))
 	{
+		if(a>b)
+		{
+			int tmp=a;
+			a=b;
+			b=tmp;
+		}
 		int flag=0;
-		for(int i=0;i<109;i++)
+		for(int i=0;i<10002;i++)
 		{
 			if(flag==1)
 				break;
-			for(int j=0;j<109;j++)
+			for(int j=0;j<10002;j++)
 			{
+				if(i*a+b*j>c)
+					break;
 				if(i*a+b*j==c)
 				{
 					flag=1;
