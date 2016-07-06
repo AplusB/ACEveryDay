@@ -1,0 +1,152 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+struct Info{
+    int mer;
+    int size;
+    Info(int m = 0){
+        mer = m;
+        size = 1;
+    }
+};
+
+Info operator + (const Info & L,const Info & R){
+    Info ret(L.mer+R.mer);
+    ret.size = L.size + R.size;
+    return ret;
+}
+
+const int maxn = 51234;
+
+struct Node{
+    int son[2],fa;
+    int v;
+    Info info;
+    int & l(){return son[0];}
+    int & r(){return son[1];}
+    Node(int V=0){
+        l() = r() = fa = -1;
+        v = V;
+        info = Info(v);
+    }
+    void maintain();
+    void out(){
+        printf("(fa = %d lr = %d,%d v = %d siz = %d)",fa,l(),r(),v,info.size);
+    }
+    void upd(int V){
+        v += V;
+        info.mer += V;
+    }
+}node[maxn];
+
+void Node::maintain(){
+    info = Info(v);
+    if(l()!=-1) info = node[l()].info + info;
+    if(r()!=-1) info = info + node[r()].info;
+}
+
+int ori(int st){
+    int fa = node[st].fa;
+    if(fa==-1) return -1;
+    //printf("st %d fa %d fa.r %d equ %d\n",st,fa,node[fa].r(),st == node[fa].r());
+    return st == node[fa].r();
+}
+
+void setc(int st,int sn,int d){
+    if(st != -1){
+        node[st].son[d] = sn;
+        node[st].maintain();
+    }
+    if(sn != -1) node[sn].fa = st;
+}
+
+void zg(int x){
+    int st = node[x].fa,p = -1;
+    int d = ori(x),dst = ori(st);
+    if(st!=-1) p=node[st].fa;
+    setc(st,node[x].son[d^1],d);
+    setc(x,st,d^1);
+    setc(p,x,dst);
+}
+
+void out(int st){
+    printf("id = %d :",st);
+    node[st].out();
+    cerr<<"["<<endl;
+    if(node[st].l()!=-1) out(node[st].l());
+    if(node[st].r()!=-1) out(node[st].r());
+    cerr<<"]"<<endl;
+}
+
+void splay(int x,int fa=-1){
+   auto f = [=](int x){return node[x].fa;}; 
+   while(f(x) != fa){
+//       printf("fx = %d\n",f(x));
+       if(f(f(x)) == fa) zg(x);
+       else{
+           if(ori(x)==ori(f(x))) zg(f(x));
+           else zg(x);
+           zg(x);
+       }
+   }
+}
+
+int arr[maxn];
+int ider[maxn];
+
+int pos;
+int build(int l,int r){
+    int st = pos++;
+    int m = (l + r) >> 1;
+    node[st] = Node(arr[m]);
+    ider[m] = st;
+    if(l<m) setc(st,build(l,m-1),0);
+    if(m<r) setc(st,build(m+1,r),1);
+    return st;
+}
+
+int build(int n){
+    pos = 0;
+    return build(0,n+1);
+}
+
+int query(int l,int r){
+    l = ider[l-1],r = ider[r+1];
+    splay(r);
+    splay(l,r);
+    int pos = node[l].r();
+    return node[pos].info.mer;
+}
+
+void update(int pos,int v){
+    pos = ider[pos];
+    splay(pos);
+    node[pos].upd(v);
+}
+
+int main(){
+    int T;
+    scanf("%d",&T);
+    int icase = 1;
+    int n;
+    while(T-- && scanf("%d",&n)){
+        memset(arr,0,sizeof(arr));
+        for(int i=1;i<=n;i++)
+            scanf("%d",&arr[i]);
+        build(n);
+        char order[10];
+        int x,y;
+        printf("Case %d:\n",icase++);
+        while(~scanf("%s",order) && *order!='E'){
+            scanf("%d %d",&x,&y);
+            if(*order == 'Q')
+                printf("%d\n",query(x,y));
+            else{
+                if(*order == 'S')
+                    y = -y;
+                update(x,y);
+            }
+        }
+    }
+    return 0;
+}
