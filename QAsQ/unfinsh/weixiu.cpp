@@ -139,17 +139,16 @@ int build(int n){
 int getid(int v,int st){
     node[st].maintain();
     int l = node[st].l();
-    int lsize = l==-1 ? 0 : node[l].info.size+1;
-    printf("st = %d lsize = %d v = %d\n",st,lsize,v);
+    int lsize = 1 + (l==-1?0:node[l].info.size);
     if(v == lsize) return st;
     int d = v > lsize;
     if(d) v -= lsize;
-    return getid(node[st].son[d],v);
+    return getid(v,node[st].son[d]);
 }
 
 int getseg(int l,int r){
     l = getid(l,root),r = getid(r+2,root);
-    printf("%d %d\n",l,r);
+    printf("lr %d %d\n",l,r);
     splay(r);
     splay(l,r);
     return node[l].r();
@@ -160,6 +159,7 @@ int main(){
     int n,m;
     while(~scanf("%d %d",&n,&m)){
         root = build(n);
+        out(root);
         int l,r,v;
         int ord;
         while(m--){
@@ -177,6 +177,7 @@ int main(){
                     printf("%d\n",node[pos].info.ma);
                 }
             }
+            out(pos);
         }
     }
     return 0;
