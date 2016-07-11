@@ -55,6 +55,9 @@ struct Node{
     }
     void maintain();
     void push_down();
+    void out(){
+        printf("(v = %d lr = %d,%d sum = %d size = %d\n",v,l(),r(),info.sum,info.size);
+    }
 }node[maxn];
 
 void Node::push_down(){
@@ -175,8 +178,37 @@ void segMaintain(int pos){
     node[root].maintain();
 }
 
+void Out(int st){
+    printf("id = %d ",st);
+    node[st].out();
+    if(node[st].l()!=-1) Out(node[st].l());
+    if(node[st].r()!=-1) Out(node[st].r());
+}
+
+vector<int> O;
+
+void ott(int st){
+    node[st].maintain();
+    node[st].push_down();
+    if(node[st].l()!=-1) ott(node[st].l());
+    O.push_back(node[st].v);
+    if(node[st].r()!=-1) ott(node[st].r());
+}
+
+void oot(int pos){
+    O.clear();
+    ott(pos);
+    printf("  |");
+    int p = 0;
+    for(auto x: O){
+        printf("%d:%d ",p++,x);
+    }
+    puts("");
+}
+
 int main(){
     int n,m;
+    
     while(~scanf("%d %d",&n,&m)){
         init();
         for(int i=1;i<=n;i++){
@@ -188,8 +220,10 @@ int main(){
         int x;
         while(m--){
             scanf("%s",&order);
+            //oot(root);
             if(*order == 'I'){ //insert
                 scanf("%d %d",&pos,&tot);
+                if(tot==0) continue;
                 for(int i=1;i<=tot;i++){
                     scanf("%d",&arr[i]);
                 }
