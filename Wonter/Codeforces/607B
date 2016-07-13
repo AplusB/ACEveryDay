@@ -1,0 +1,46 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int dp[510][510];
+int arr[510];
+
+int main()
+{
+    int n;
+    scanf("%d", &n);
+    for(int i = 1; i <= n; ++i)
+        scanf("%d", &arr[i]);
+    memset(dp, 1, sizeof(dp));
+    for(int l = 1; l <= n; ++l)
+    {
+        int t = n - l + 1;
+        for(int s = 1; s <= t; ++s)
+        {
+            int e = s + l - 1;
+            for(int k = s; k <= e; ++k)
+            {
+                if(arr[s] == arr[k])
+                {
+                    if(s + 1 > k - 1 && k + 1 > e)
+                    {
+                        dp[s][e] = 1;
+                        continue;
+                    }
+                    if(s + 1 > k - 1)
+                    {
+                        dp[s][e] = min(dp[s][e], 1 + dp[k + 1][e]);
+                        continue;
+                    }
+                    if(k + 1 > e)
+                    {
+                        dp[s][e] = min(dp[s][e], dp[s + 1][k - 1]);
+                        continue;
+                    }
+                    dp[s][e] = min(dp[s][e], dp[s + 1][k - 1] + dp[k + 1][e]);
+                }
+            }
+        }
+    }
+    printf("%d\n", dp[1][n]);
+    return 0;
+}
