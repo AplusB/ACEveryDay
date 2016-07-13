@@ -1,0 +1,56 @@
+//hdoj 1260
+
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long LL;
+typedef unsigned long long ULL;
+typedef pair<int, int> PI;
+typedef pair< PI, int> PII;
+const double eps=1e-5;
+const double pi=acos(-1.0);
+const int mod=1e9+7;
+const int INF=0x3f3f3f3f;
+
+const int N=2010;
+
+int a[N];
+int b[N];
+int dp[N];
+
+int main()
+{
+	int n,time,t,i;
+	cin>>t;
+	while(t--)
+	{
+		cin>>n;
+		for(i=1;i<=n;i++)
+			scanf("%d",&a[i]);
+		for(i=2;i<=n;i++)
+			scanf("%d",&b[i]);
+		memset(dp,0,sizeof(dp));
+		dp[1]=a[1];
+		for(i=2;i<=n;i++){
+			dp[i]=min(dp[i-1]+a[i],dp[i-2]+b[i]);
+		}
+		
+		char s[5];
+		time=dp[n];
+		int ss,hh,mm;
+		ss=time%60;
+		mm=(time-ss)/60%60;
+		hh=(time-ss-mm*60)/3600+8;
+		hh%=24;
+		if(hh>12){
+			strcpy(s,"pm");
+		}
+		else
+			strcpy(s,"am");
+		if(hh!=12)
+			hh%=12;
+		printf("%02d:%02d:%02d %s\n",hh,mm,ss,s);
+	}
+	return 0;
+}
+
+
