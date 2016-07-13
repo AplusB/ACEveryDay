@@ -1,146 +1,111 @@
-#include<cstdio>
-#include<iostream>
-#include<algorithm>
-using namespace std;
-const int MAX_N = 50000 + 10;
-const int INF = ~0U >> 1;
-struct Node {
-	Node*ch[2], *p;
-	int size, val, mx;
-	int add;
-	bool rev;
-	Node() {
-		size = 0;
-		val = mx = -INF;
-		add = 0;
-	}
-	bool d() {
-		return this == p->ch[1];
-	}
-	void setc(Node*c, int d) {
-		ch[d] = c;
-		c->p = this;
-	}
-	void addIt(int ad) {
-		add += ad;
-		mx += ad;
-		val += ad;
-	}
-	void revIt() {
-		rev ^= 1;
-	}
-	void relax();
-	void upd() {
-		size = ch[0]->size + ch[1]->size + 1;
-		mx = max(val, max(ch[0]->mx, ch[1]->mx));
-	}
-} Tnull, *null = &Tnull;
-Node mem[MAX_N], *C = mem;
-
-void Node::relax() {
-	if (add != 0) {
-		for (int i = 0; i < 2; ++i) {
-			if (ch[i] != null)
-				ch[i]->addIt(add);
-		}
-		add = 0;
-	}
-	if (rev) {
-		swap(ch[0], ch[1]);
-		for (int i = 0; i < 2; ++i) {
-			if (ch[i] != null)
-				ch[i]->revIt();
-		}
-		rev = 0;
-	}
+struct Info{
+    int size;
+    Info(int val = 0){ size = 1;
+        // info upd
+    }
+    void setIt(int val){
+        //info maintiain
+    }
+};
+Info operator + (const Info & L,const Info & R){
+    Info ret; ret.size = L.size + R.size;
+    // info maintain
+    return ret;
 }
 
-Node*make(int v) {
-	C->ch[0] = C->ch[1] = null;
-	C->size = 1;
-	C->val = v;
-	C->mx = v;
-	C->add = 0;
-	C->rev = 0;
-	return C++;
+const int maxn = 552345;
+struct Node{
+    int son[2],fa;
+    int v; Info info;
+    int set,lazy;
+    int & l(){return son[0];}
+    int & r(){return son[1];}
+    Node(int Val=0){
+        l() = r() = fa = -1;
+        v = Val;
+        info = Info(Val);
+        set = lazy = 0;
+    }
+    void setIt(int Val){
+        v = Val;
+        set = Val;
+        lazy = true;
+        info.setIt(Val);
+    }
+    void maintain();
+    void push_down();
+}node[maxn];
+void Node::push_down(){
+    if(lazy){
+        if(l()!=-1) node[l()].setIt(set);
+        if(r()!=-1) node[r()].setIt(set);
+        lazy = false;
+    }
 }
-
-Node*build(int l, int r) {
-	if (l >= r)
-		return null;
-	int m = (l + r) >> 1;
-	Node*t = make(0);
-	t->setc(build(l, m), 0);
-	t->setc(build(m + 1, r), 1);
-	t->upd();
-	return t;
+void Node::maintain(){
+    info = Info(v);
+    if(l()!=-1) info = node[l()].info + info;
+    if(r()!=-1) info = info + node[r()].info;
 }
-
-Node*root;
-
-Node*rot(Node*t) {
-	Node*p = t->p;
-	p->relax();
-	t->relax();
-	int d = t->d();
-	p->p->setc(t, p->d());
-	p->setc(t->ch[!d], d);
-	t->setc(p, !d);
-	p->upd();
-	if (p == root)
-		root = t;
+void setc(int st,int sn,int d){
+    if(st != -1){
+        node[st].son[d] = sn;
+        node[st].maintain();
+    }
+    if(sn != -1) node[sn].fa = st;
 }
-
-void splay(Node*t, Node*f = null) {
-	while (t->p != f) {
-		if (t->p->p == f)
-			rot(t);
-		else
-			t->d() == t->p->d() ? (rot(t->p), rot(t)) : (rot(t), rot(t));
-	}
-	t->upd();
+int ori(int st){
+    int fa = node[st].fa;
+    if(fa==-1) return -1;
+    return st == node[fa].r();
 }
+void zg(int x){
+    int st = node[x].fa,p = -1;
+    node[st].push_down();
+    node[ x].push_down();
+    int d = ori(x),dst = ori(st);
+    if(st!=-1) p=node[st].fa;
 
-Node* select(int k) {
-	for (Node*t = root;;) {
-		t->relax();
-		int c = t->ch[0]->size;
-		if (k == c)
-			return t;
-		if (k > c)
-			k -= c + 1, t = t->ch[1];
-		else
-			t = t->ch[0];
-	}
+    setc(st,node[x].son[d^1],d);
+    setc(x,         st    ,d^1);
+    setc(p,         x     ,dst);
 }
-
-Node*&get(int l, int r) { //[l,r)
-	Node*L = select(l - 1);
-	Node*R = select(r);
-	splay(L);
-	splay(R, L);
-	return R->ch[0];
+int root;
+#define f(x) (node[x].fa)
+void splay(int x,int fa=-1){
+    while(f(x) != fa){
+        if(f(f(x)) == fa) zg(x);
+        else{
+           if(ori(x)==ori(f(x))) zg(f(x));
+           else zg(x);
+           zg(x);
+        }
+    }
+    if(fa==-1) root = x;
 }
-
-int n, m;
-
-int main() {
-	cin >> n >> m;
-	root = build(0, n + 2);
-	root->p = null;
-	for (int i = 0; i < m; ++i) {
-		int k, l, r, v;
-		scanf("%d%d%d", &k, &l, &r);
-		Node*&t = get(l, r + 1);
-		if (k == 1) {
-			scanf("%d", &v);
-			t->addIt(v);
-			splay(t);
-		} else if (k == 2) {
-			t->revIt();
-			splay(t);
-		} else {
-			printf("%d\n", t->mx);
-		}
-	}
+int build(int l,int r){
+    if(l>r) return -1;
+    int m = (l + r) >> 1;
+    int st = newNode( 0 ); //init value
+    setc(st,build(l,m-1),0);
+    setc(st,build(m+1,r),1);
+    return st;
+}
+int build(int n){
+    return build(0,n+1);
+}
+int getid(int v,int st){
+    node[st].push_down();
+    int l = node[st].l();
+    int lsize = 1 + (l==-1?0:node[l].info.size);
+    if(v == lsize) return st;
+    int d = v > lsize;
+    if(d) v -= lsize;
+    return getid(v,node[st].son[d]);
+}
+int getseg(int l,int r){
+    l--,r++;
+    l = getid(l+1,root),r = getid(r+1,root);
+    splay(r),splay(l,r);
+    return node[l].r();
 }

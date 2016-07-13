@@ -32,9 +32,10 @@ const int maxn = 552345;
 
 struct Node{
     int son[2],fa;
-    int v;
     int set, flp;
     bool lazy;
+  
+    int v;
     Info info;
     int & l(){return son[0];}
     int & r(){return son[1];}
