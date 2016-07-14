@@ -1,0 +1,77 @@
+//E - Xor-sequences  
+#include <bits/stdc++.h>
+using namespace std;
+#define mod 1000000007
+struct Matrix
+{
+    int data[100][100];
+    Matrix() {memset(data, 0, sizeof(data));}
+};
+__int64 arr[100];
+int n;
+__int64 k;
+int Count(__int64 n)
+{
+    int ret = 0;
+    while(n)
+    {
+        if(n & 1)
+            ++ret;
+        n >>= 1;
+    }
+    return ret;
+}
+Matrix Multiply(const Matrix &a, const Matrix &b)
+{
+    Matrix ret;
+    for(int i = 0; i < n; ++i)
+        for(int j = 0; j < n; ++j)
+        {
+            ret.data[i][j] = 0;
+            for(int k = 0; k < n; ++k)
+                ret.data[i][j] = (ret.data[i][j] +
+                                  static_cast<__int64>(a.data[i][k]) * b.data[k][j] % mod) % mod;
+        }
+    return ret;
+}
+Matrix FastPow(Matrix &a, __int64 b)
+{
+    Matrix ret;
+    for(int i = 0; i < n; ++i)
+        ret.data[i][i] = 1;
+    while(b)
+    {
+        if(b & 1)
+            ret = Multiply(ret, a);
+        a = Multiply(a, a);
+        b >>= 1;
+    }
+    return ret;
+}
+int main()
+{
+    scanf("%d%I64d", &n, &k);
+    for(int i = 0; i < n; ++i)
+        scanf("%I64d", &arr[i]);
+    //Construct Matrix-a
+    Matrix a;
+    for(int i = 0; i < n; ++i)
+        a.data[0][i] = 1;
+    //Construct Matrix-b
+    Matrix b;
+    for(int i = 0; i < n; ++i)
+        for(int j = 0; j < n; ++j)
+        {
+            if(Count(arr[i] ^ arr[j]) % 3 == 0)
+                b.data[i][j] = 1;
+        }
+    //Slove a*b^(k-1)
+    b = FastPow(b, k - 1);
+    a = Multiply(a, b);
+    //GetAnswer
+    int ans = 0;
+    for(int i = 0; i < n; ++i)
+        ans = (ans + a.data[0][i]) % mod;
+    printf("%d\n", ans);
+    return 0;
+}
