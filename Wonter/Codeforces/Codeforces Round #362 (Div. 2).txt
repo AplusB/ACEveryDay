@@ -1,0 +1,59 @@
+//C - Lorenzo Von Matterhorn
+#include <bits/stdc++.h>
+using namespace std;
+
+map<__int64, __int64> mp;
+int main()
+{
+    __int64 q;
+    scanf("%I64d", &q);
+    while(q--)
+    {
+        __int64 oper;
+        scanf("%I64d", &oper);
+        switch(oper)
+        {
+        case 1:
+        {
+            __int64 u, v, w;
+            scanf("%I64d%I64d%I64d", &u, &v, &w);
+            while(u != v)
+            {
+                if(u > v)
+                {
+                    mp[u] += w;
+                    u >>= 1;
+                }
+                else
+                {
+                    mp[v] += w;
+                    v >>= 1;
+                }
+            }
+            break;
+        }
+        case 2:
+        {
+            __int64 u, v;
+            scanf("%I64d%I64d", &u, &v);
+            __int64 ans = 0;
+            while(u != v)
+            {
+                if(u > v)
+                {
+                    ans += mp[u];
+                    u >>= 1;
+                }
+                else
+                {
+                    ans += mp[v];
+                    v >>= 1;
+                }
+            }
+            printf("%I64d\n", ans);
+            break;
+        }
+        }
+    }
+    return 0;
+}
