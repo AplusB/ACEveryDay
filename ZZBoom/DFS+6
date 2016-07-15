@@ -1,0 +1,58 @@
+//hdoj 1584
+
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long LL;
+typedef unsigned long long ULL;
+const double eps=1e-5;
+const double pi=acos(-1.0);
+const int mod=1e9+7;
+const int INF=0x3f3f3f3f;
+const int N=1e5+10;
+
+int a[15],vis[15];
+int ans;
+
+void dfs(int cur,int temp)
+{
+	if(temp>=ans){
+		return;
+	}
+	if(cur==9){         //10是不会动的，动9张就行
+		ans=temp;
+		return;
+	}
+	for(int i=1;i<10;i++){          //所有情况的DFS
+		if(!vis[i]){
+			for(int k=i+1;k<=10;k++){       //放的肯定比他的大
+				if(!vis[k]){
+					vis[i]=1;
+					dfs(cur+1,temp+abs(a[i]-a[k]));     
+					break;                  //放完就结束。
+				}
+			}
+			vis[i]=0;       //回溯
+		}
+	}
+}
+
+int main()
+{
+	int T,i;
+	scanf("%d",&T);
+	while(T--)
+	{
+		int x;
+		for(i=1;i<=10;i++){
+			cin>>x;
+			a[i]=x;
+		}
+		memset(vis,0,sizeof(vis));
+		ans=INF;
+		dfs(0,0);
+		cout<<ans<<endl;
+	}
+	return 0;
+}
+
+
