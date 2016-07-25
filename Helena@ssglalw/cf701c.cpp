@@ -65,38 +65,23 @@ int main()
 	}
 	e--;
 	//保证每个元素都已创建key-value对了
-
-	// printf("%d %d\n", s, e);
-	// for(int i=s; i<=e; i++){
-	// 	printf("%c ", flat[i]);
-	// }
-	// bool flag = 1;
-	// while(flag){
-	// 	flag = 0;
-	// 	while(M[flat[s]]>1){//这样会陷入局部最优出不来。。。
-	// 		flag = 1;
-	// 		M[flat[s]]--;
-	// 		s++;
-	// 	}
-	// 	while(M[flat[e]] > 1){
-	// 		flag = 1;
-	// 		M[flat[e]]--;
-	// 		e--;
-	// 	}
-	// }
+	while(M[flat[s]]>1){//s走到不能走为止，保证完整性
+		M[flat[s]]--;
+		s++;
+	}
 	int ans = e - s + 1;
-	for(; e < n; e++){
+	for(e = e+1; e < n; e++){
+		M[flat[e]]++;//e向前拓展一步
 		while(M[flat[s]]>1){//s走到不能走为止，保证完整性
 			M[flat[s]]--;
 			s++;
 		}
-		ans = min(ans, e - s + 1);
 		// printf("%d %d\n", s, e);
 		// for(int i=s; i<=e; i++){
 		// 	printf("%c ", flat[i]);
 		// }
 		// pn();
-		M[flat[e]]++;//e向前拓展一步
+		ans = min(ans, e - s + 1);
 	}
 	printf("%d\n", ans);
 	return 0;
