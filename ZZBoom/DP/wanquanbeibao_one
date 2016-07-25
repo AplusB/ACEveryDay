@@ -1,0 +1,49 @@
+//lightoj 1736
+#include<bits/stdc++.h>
+//#include<cstdio>
+//#include<math.h>
+//#include<string.h>
+//#include<algorithm>
+using namespace std;
+typedef long long LL;
+typedef unsigned long long ULL;
+const double eps=1e-5;
+const double pi=acos(-1.0);
+const int mod=1e8+7;
+const LL INF=0x3f3f3f3f;
+
+const int N=1e2+10;
+
+int val[N],dw[N];
+int dp[N*N];
+
+int main()
+{
+    int cas=1;
+    int n,w;
+    int t,x,sum;
+    scanf("%d",&t);
+    while(t--)
+    {
+        scanf("%d%d",&n,&w);
+        sum=0;
+        for(int i=1;i<=n;i++)
+        {
+            scanf("%d%d%d",&val[i],&x,&dw[i]);
+            sum+=x*dw[i];
+        }
+        w-=sum;
+        if(w<0){
+            printf("Case %d: Impossible\n",cas++);
+            continue;
+        }
+        memset(dp,0,sizeof(dp));
+        for(int i=1;i<=n;i++){
+            for(int j=dw[i];j<=w;j++){
+                dp[j]=max(dp[j],dp[j-dw[i]]+val[i]);
+            }
+        }
+        printf("Case %d: %d\n",cas++,dp[w]);
+    }
+    return 0;
+}
