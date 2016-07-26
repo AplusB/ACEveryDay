@@ -1,0 +1,97 @@
+#include<bits/stdc++.h>
+using namespace std;
+typedef long long LL;
+typedef unsigned long long ULL;
+const int eps=1e-9;
+const int pi=acos(-1.0);
+const int mod=1e8+7;
+const LL INF=1e11;
+
+const int N=1e5+10;
+
+struct asd{
+    int to;
+    LL w;
+    int next;
+};
+asd q[N*2];
+int tol,head[N*2];
+int n,m;
+int num[N],vis[N];
+LL dis[N];
+int pre[N];
+queue<int>e;
+void shuchu(int x)
+{
+    if(pre[x]==-1){
+        printf("%d",x);
+        return;
+    }
+    shuchu(pre[x]);
+    printf(" %d",x);
+}
+
+void spfa(int s,int t)
+{
+    for(int i=1;i<=n;i++)
+    {
+        dis[i]=INF;
+        vis[i]=num[i]=0;
+    }
+    pre[1]=-1;
+    dis[1]=0;
+    vis[1]=1;
+    while(!e.empty())
+        e.pop();
+    e.push(1);
+    while(!e.empty())
+    {
+        int u=e.front();
+        e.pop();
+        vis[u]=0;
+        for(int v=head[u];v!=-1;v=q[v].next)
+        {
+            int i=q[v].to;
+            if(dis[i]>dis[u]+q[v].w){
+                pre[i]=u;
+                dis[i]=dis[u]+q[v].w;
+                if(!vis[i]){
+                    vis[i]=1;
+                    e.push(i);
+                }
+            }
+        }
+    }
+    if(dis[n]!=INF)
+        shuchu(n);
+    else
+        puts("-1");
+}
+void init()
+{
+    tol=0;
+    memset(head,-1,sizeof(head));
+}
+void add(int a,int b,LL c)
+{
+    q[tol].to=b;
+    q[tol].w=c;
+    q[tol].next=head[a];
+    head[a]=tol++;
+}
+int main()
+{
+    int a,b;
+    LL c;
+    scanf("%d%d",&n,&m);
+    init();
+    for(int i=0;i<m;i++)
+    {
+        scanf("%d%d%I64d",&a,&b,&c);
+        add(a,b,c);
+        add(b,a,c);
+    }
+    spfa(1,n);
+    return 0;
+}
+
