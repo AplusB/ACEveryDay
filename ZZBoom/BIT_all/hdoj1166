@@ -1,0 +1,76 @@
+//基础计算区间求和，改变某个值。
+
+#include<bits/stdc++.h>
+using namespace std;
+typedef long long LL;
+typedef unsigned long long ULL;
+const double eps=1e-5;
+const double pi=acos(-1.0);
+const int mod=1e8+7;
+const LL INF=0x3f3f3f3f;
+
+const int N=1e4+7;
+int n,C[N*5];
+
+int lowbit(int t)
+{
+    return t&(t^(t-1));
+}
+
+int Sum(int i)
+{
+    int sum=0;
+    while(i>0)
+    {
+        sum+=C[i];
+        i-=lowbit(i);
+    }
+    return sum;
+}
+void Add(int i,int t)
+{
+    while(i<=n)
+    {
+        C[i]+=t;
+        i+=lowbit(i);
+    }
+}
+
+int main()
+{
+    char s[10];
+    int i,t,cas=1,j,u,v;
+    scanf("%d",&t);
+    while(t--)
+    {
+        memset(C,0,sizeof(C));
+        scanf("%d",&n);
+        for(i=1;i<=n;i++)
+        {
+            scanf("%d",&v);
+            Add(i,v);
+        }
+        printf("Case %d:\n",cas++);
+        while(scanf("%s",s))
+        {
+            if(strcmp(s,"End")==0)
+                break;
+            scanf("%d%d",&u,&v);
+            if(strcmp(s,"Query")==0)
+            {
+                u=Sum(u-1);
+                v=Sum(v);
+                printf("%d\n",v-u);
+            }
+            if(strcmp(s,"Sub")==0)
+            {
+                v=-v;
+                Add(u,v);
+            }
+            if(strcmp(s,"Add")==0)
+                Add(u,v);
+        }
+    }
+    return 0;
+}
+
