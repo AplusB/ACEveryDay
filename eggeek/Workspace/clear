@@ -3,8 +3,7 @@ from os import listdir as ls
 from os import remove
 from os.path import isfile
 from shutil import rmtree
-protected = ['.git', 'clear', 'sol', 'data', 'run', 'unfinished', 'retrieval-codeforces.py',
-             'problems']
+protected = ['.git', 'clear', 'sol', 'data', 'run', 'unfinished', 'support-files']
 cur = '.'
 trash = []
 

@@ -5,7 +5,7 @@ from jinja2 import Template
 
 cur = '.'
 defualt_problem = ""
-with open("problems", "r") as f:
+with open("support-files/problems", "r") as f:
     defualt_problem = f.readlines()[0].split(",")[1].replace('/', '')
 parser = argparse.ArgumentParser(description="")
 parser.add_argument('problem', nargs='?', default=defualt_problem)
@@ -20,7 +20,7 @@ lang = args.lang
 path = './%s' % problem
 mkdir(path)
 symlink("/Users/eggeek/Downloads", "%s/data" % path)
-symlink("../run", "%s/run" % path)
+symlink("../support-files/run", "%s/run" % path)
 filepath = '%s/%s.%s' % (path, args.problem, lang)
 
 
