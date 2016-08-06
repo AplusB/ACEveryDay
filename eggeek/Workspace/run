@@ -1,0 +1,8 @@
+#!/bin/bash
+clear; clear
+g++ $1 -g -std=c++0x -Wall -Wconversion -Wshadow -o sol || exit
+
+for i in *.in; do
+    echo --- $i
+    ./sol < $i > o && (diff -y o ${i%.in}.[ao]?? > t || cat t) || cat o
+done
