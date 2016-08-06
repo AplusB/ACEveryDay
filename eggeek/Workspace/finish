@@ -1,0 +1,21 @@
+#!/usr/bin/env python
+# -*-: encoding: utf-8 -*-
+from shutil import rmtree, move
+import argparse
+parser = argparse.ArgumentParser()
+parser.add_argument("problem")
+args = parser.parse_args()
+pid = args.problem
+
+x = raw_input("Finish and delete [%s]? y/n" % pid)
+
+if x == 'y':
+    move('%s/%s.cpp' % (pid, pid), '../codeforces/%s.cpp' % pid)
+    rmtree(pid)
+    old_problems = open("support-files/problems", "r").readlines()
+    new_problems = [i for i in old_problems if i.split(",")[1].replace('/', '') != pid]
+    with open("support-files/problems", "w") as f:
+        for i in new_problems:
+            f.write(i)
+
+print "Done!"
