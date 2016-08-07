@@ -18,4 +18,3 @@ data = [format_p(i) for i in res]
 with open("problems", "w") as f:
     for i in data:
         f.write(i.encode('utf-8') + '\n')
-        sd
