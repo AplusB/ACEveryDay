@@ -1,8 +1,3 @@
-1997,487/A,Fight the Monster
-1993,362/A,Two Semiknights Meet
-1991,305/A,Strange Addition
-1991,215/B,Olympic Medal
-1989,483/B,Friends and Presents
 1988,400/C,Inna and Huge Candy Matrix
 1987,228/B,Two Tables
 1984,290/A,Mysterious strings
@@ -15,10 +10,10 @@
 1973,472/D,Design Tutorial: Inverse the Problem
 1972,226/A,Flying Saucer Segments
 1972,144/C,Anagram Search
+1969,704/A,Thor
 1967,8/A,Train and Peter
 1966,482/B,Interesting Array
 1966,479/E,Riding in a Lift
-1964,704/A,Thor
 1962,286/A,Lucky Permutation
 1958,510/D,Fox And Jumping
 1956,131/D,Subway
@@ -713,7 +708,7 @@
  774,222/C,Reducing Fractions
  774,101/B,Buses
  773,62/B,Tyndex.Brome
- 771,703/D,Mishka and Interesting sum
+ 772,703/D,Mishka and Interesting sum
  771,201/B,Guess That Car!
  771,22/D,Segments
  770,584/E,Anton and Ira
@@ -739,7 +734,7 @@
  744,524/D,Social Network
  744,508/E,Arthur and Brackets
  744,13/C,Sequence
- 741,280/C,Game on Tree
+ 742,280/C,Game on Tree
  741,121/C,Lucky Permutation
  740,16/E,Fish
  739,420/B,Online Meeting
@@ -1620,8 +1615,8 @@
  167,95/D,Horse Races
  166,386/D,Game with Points
  166,331/C2,The Great Julya Calendar
+ 165,226/E,Noble Knight's Path
  164,396/D,On Sum of Number of Inversions in Permutations
- 164,226/E,Noble Knight's Path
  164,201/E,Thoroughly Bureaucratic Organization
  164,178/E2,The Beaver's Problem - 2
  164,75/E,Ship's Shortest Path
@@ -1763,6 +1758,7 @@
  116,45/B,School
  115,703/E,Mishka and Divisors
  115,470/D,Caesar Cipher
+ 114,704/B,Ant Man
  114,461/E,Appleman and a Game
  114,380/E,Sereja and Dividing
  114,232/E,Quick Tortoise
@@ -1771,7 +1767,6 @@
  113,434/D,Nanami's Power Plant
  113,306/D,Polygon
  113,207/A3,Beaver's Calculator 1.0
- 112,704/B,Ant Man
  112,370/E,Summer Reading
  111,592/E,BCPC
  111,512/E,Fox And Polygon

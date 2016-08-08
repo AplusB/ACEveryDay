@@ -5,8 +5,12 @@ from jinja2 import Template
 
 cur = '.'
 defualt_problem = ""
+url_templet = "http://codeforces.com/problemset/problem/{name}"
+defualt_problem_url = ""
 with open("support-files/problems", "r") as f:
-    defualt_problem = f.readlines()[0].split(",")[1].replace('/', '')
+    first_line = f.readlines()[0]
+    defualt_problem = first_line.split(",")[1].replace('/', '')
+    defualt_problem_url = url_templet.format(name=first_line.split(",")[1])
 parser = argparse.ArgumentParser(description="")
 parser.add_argument('problem', nargs='?', default=defualt_problem)
 parser.set_defaults(lang='cpp')
@@ -18,6 +22,9 @@ problem = args.problem
 lang = args.lang
 
 path = './%s' % problem
+print "%s has been created" % path
+if problem == defualt_problem:
+    print defualt_problem_url
 mkdir(path)
 symlink("/Users/eggeek/Downloads", "%s/data" % path)
 symlink("../support-files/run", "%s/run" % path)
