@@ -8,7 +8,7 @@ for(int i=1;i<=n;i++){
     }
 }
 
-// sum_n = \sum_1^n mu[i]
+<TeX> $sum_n = \sum_1^n mu[i]$ </TeX>
 int sum[maxn];
 LL solve(int n,int m)
 {

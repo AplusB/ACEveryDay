@@ -2,19 +2,6 @@
 #define LL long long
 LL a[15], b[15];
 
-LL Extend_Euclid(LL a, LL b, LL&x, LL& y)
-{
-    if(b == 0)
-    {
-        x = 1, y = 0;
-        return a;
-    }
-    LL d = Extend_Euclid(b, a%b, x, y);
-    LL t = x;
-    x = y;
-    y = t - a/b*y;
-    return d;
-}
 //cal x= a_i(mod n_i)
 LL China_Reminder(int len, LL* a, LL* n)
 {

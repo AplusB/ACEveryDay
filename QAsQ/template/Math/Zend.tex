@@ -1,0 +1,46 @@
+\begin{align*}
+& Fibonacci Array \\
+& \\
+& \sum_{i=0}^nf(i)=f(n+2)-1 \\
+& \sum_{i=1}^nf(2i-1)=f(2n) \\
+& \sum_{i=1}^nf(2i)=f(2n+1)-1 \\
+& \sum_{i=1}^nf^2(i)=f(n)f(n+1) \\
+& \sum_{i=1}^nif(i)=nf(n+2)-f(n+3)+2 \\
+& f(n-k)f(n+k)-(-1)^{k-n}f^2(n)=f^k(n) \\
+& 3f(n)=f(n-2)+f(n+2) \\
+& f(m+n-1)=f(m-1)f(n-1)+f(m)f(n) \\
+& f(2n-2m-2)(f(2n)+f(2n+2))=f(2m+2)+f(4n-2m) \\
+& f(2n-1)=f^2(n)-f^2(n-2) \\
+& f(n)=\binom{n-1}{0}+\binom{n-2}{1}+L+\binom{n-1-m}{m} \\
+& Lucas Array \\
+\end{align*}
+$$ L(n)=\left\{
+\begin{aligned}
+2 & , & x = 1 \\
+1 & , & x = 2 \\
+L_{n-1}+L_{n-2} & , & x \geq 2
+\end{aligned}
+\right.
+$$
+\begin{align*}
+& \\
+& F_{2n}=F_nL_n \\
+& 5F_n=L{n-1}+L{n+1} \\
+& L^2_n=5F_n^2+4(-1)^n \\
+& \lim\limits_{x \to \infty} \frac{L_n}{F_n} = \sqrt 5 \\
+& L_n=F_{n-1}+F_{n+1} \\
+& \sum\limits_{k=0}^{n}\binom n k (-1)^kF(k)=-F(n) \\
+& \sum\limits_{k=0}^{n}\binom n k (-1)^kL(k)=L(n) \\
+& \sum\limits_{k=0}^{n}\binom n k F(k)=F(2n) \\
+& \sum\limits_{k=0}^{\lfloor\frac n 2\rfloor}\binom{n-k}{k}=F(n+1) \\
+& \sum\limits_{k=0}^{n}\binom k n[f(k)+(-1)^{n-k}\sum\limits_{s=0}^k\binom k sf(s)]F(n-k)=0 \\
+& \sum\limits_{k=0}^{n}\binom k n[f(k)-(-1)^{n-k}\sum\limits_{s=0}^k\binom k sf(s)]L(n-k)=0 \\
+& \\
+& gcd(F(n),F(m))=gcd(n,m) \\
+& F(m)|F(n) \leftrightarrow m|n \\
+& assert\;p\;is\;prime \\
+& F(p-p\left(\frac p 5 \right))\equiv0(mod\;p) \\
+& F(p+p\left(\frac p 5 \right))\equiv1(mod\;p) \\
+& F(p)\equiv \left(\frac p 5\right)(mod\;p)
+\end{align*}
+

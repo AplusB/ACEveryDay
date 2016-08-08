@@ -1,8 +1,5 @@
-﻿const int maxn=123456;
-const int max_log=20;
-
+﻿const int max_log=20;
 int A[maxn];
-
 int d[maxn][max_log];
 
 // 区间最小值的查询
@@ -13,8 +10,6 @@ void RMQ_init(){
             d[i][j] = min(d[i][j-1]
                           ,d[i + (1<<j)-1][j-1]);
 }
-
-
 int RMQ(int L,int R){
     int k = 0;
     whie(1<<(k+1)) k++;

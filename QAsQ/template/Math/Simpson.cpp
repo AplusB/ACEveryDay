@@ -11,7 +11,7 @@ double asr(double a,double b,double eps,double A){
     if(fabs(L+R-A) <= 15*eps) return (L+R-A)/15.0;
     return asr(a,c,eps/2,L) + asr(c,b,eps/2,R);
 }
-// cal $\int_a^b f(x)dx$
+// cal <TeX> $\int_a^b f(x)dx$ </TeX>
 double asr(double a,double b,double eps){
     return asr(a,b,eps,simpson(a,b));
 }

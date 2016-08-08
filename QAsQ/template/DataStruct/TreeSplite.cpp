@@ -1,11 +1,11 @@
 ﻿const int maxn = 52345;
-
 const int ROOT = 0;
 int n;
 vector<int> edge[maxn];
 
 
-int fa[maxn],son[maxn],siz[maxn],deep[maxn],top[maxn],tid[maxn];
+int fa[maxn],son[maxn],siz[maxn];
+int deep[maxn],top[maxn],tid[maxn];
 int _cnt;
 
 void dffs(int st,int Fa,int Deep){
@@ -39,17 +39,16 @@ void splite(){
 }
 
 int QUE_or_UPD(int x,int y){
-    int ret = 0;
+    Info ix,iy;
     int tx = top[x],ty = top[y];
     while(tx != ty){
         if(deep[tx] < deep[ty])
-            swap(tx,ty),swap(x,y);
-        ret += qu(root,tid[tx],tid[x]);
+            swap(tx,ty),swap(x,y),swap(ix,iy);
+        ix = QU(root,tid[tx],tid[x]) + ix;
         x = fa[tx],tx = top[x];
     }
     if(deep[x] < deep[y])
         swap(x,y);
-    ret += qu(root,tid[y],tid[x]);
-    return ret;
+    return rev(ix) + QU(root,tid[y]/*+1 (Vertex weight)*/,tid[x]) + iy;
 }
 

@@ -2,7 +2,6 @@
 * 二维RMQ，预处理复杂度 n*m*log*(n)*log(m)
 * 数组下标从 1 开始
 */
-
 const int maxn=112345;
 const int max_log=20;
 int val[maxn][maxn];
@@ -23,20 +22,17 @@ void initRMQ(int n,int m)
                 for(int j = 1; j + (1<<jj) - 1 <= m; j++)
                 {
                     if(ii)
-
 dp[i][j][ii][jj]
 = max(dp[i][j][ii-1][jj]
 ,dp[i+(1<<(ii-1))][j][ii-1][jj]);
-
-                        else
-
+                    else
 dp[i][j][ii][jj]
 = max(dp[i][j][ii][jj-1]
 ,dp[i][j+(1<<(jj-1))][ii][jj-1]);
 
                 }
 }
-//查询矩形内的最大值(x1<=x2,y1<=y2)
+//get Min x1<=x2,y1<=y2)
 int rmq(int x1,int y1,int x2,int y2)
 {
     int k1 = mm[x2-x1+1];
