@@ -6,6 +6,9 @@ int dfn[maxn],low[maxn],_cnt;
 int bel[maxn];
 
 void init(int n){
+    for(int i=0;i<n;i++){
+        edge[i].clear();
+    }
     while(S.empty()==false)
         S.pop();
     memset(dfn,-1,sizeof(dfn));
