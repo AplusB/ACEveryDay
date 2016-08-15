@@ -1,6 +1,3 @@
-#include <algorithm>
-using namespace std;
-
 void palindrome(char cs[], int len[], int n) {
     //len[i] means the max palindrome length centered i/2
 	for (int i = 0; i < n * 2; ++i) {
