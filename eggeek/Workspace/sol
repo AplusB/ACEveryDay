@@ -1,34 +1,18 @@
 #!/usr/bin/env python
+from tinydb import TinyDB, Query
 import argparse
 from os import mkdir, symlink
 from jinja2 import Template
 
-cur = '.'
-defualt_problem = ""
-url_templet = "http://codeforces.com/problemset/problem/{name}"
-defualt_problem_url = ""
-with open("support-files/problems", "r") as f:
-    first_line = f.readlines()[0]
-    defualt_problem = first_line.split(",")[1].replace('/', '')
-    defualt_problem_url = url_templet.format(name=first_line.split(",")[1])
-parser = argparse.ArgumentParser(description="")
-parser.add_argument('problem', nargs='?', default=defualt_problem)
-parser.set_defaults(lang='cpp')
-parser.add_argument('-py', dest='lang', action="store_const", const="py")
-parser.add_argument('-java', dest='lang', action="store_const", const="java")
 
-args = parser.parse_args()
-problem = args.problem
-lang = args.lang
-
-path = './%s' % problem
-print "%s has been created" % path
-if problem == defualt_problem:
-    print defualt_problem_url
-mkdir(path)
-symlink("/Users/eggeek/Downloads", "%s/data" % path)
-symlink("../support-files/run", "%s/run" % path)
-filepath = '%s/%s.%s' % (path, args.problem, lang)
+def get_default_problem():
+    db = TinyDB('support-files/db.json')
+    p = Query()
+    q1 = (p.solvedCount <= 2000) | (p.index == 'C')
+    q2 = (p.isSolved == 0)
+    ps = db.search(q1 & q2)
+    ps.sort(key=lambda x: x['solvedCount'], reverse=True)
+    return str(ps[0]['contestId']) + '/' + ps[0]['index']
 
 
 def gen_java_tmpl(problem):
@@ -36,11 +20,39 @@ def gen_java_tmpl(problem):
     tmpl_str = tmpl.render(problem=problem)
     return tmpl_str
 
-with open(filepath, "w") as f:
-    if lang == 'py':
-        template = open("/Users/eggeek/.vim/templates/acm.py").read()
-    elif lang == 'java':
-        template = gen_java_tmpl(problem)
-    else:
-        template = open("/Users/eggeek/.vim/templates/acm.cpp").read()
-    f.write(template)
+
+def work():
+    default_pid = get_default_problem()
+    url_templet = "http://codeforces.com/problemset/problem/{name}"
+    defualt_problem_url = url_templet.format(name=default_pid)
+
+    parser = argparse.ArgumentParser(description="")
+    parser.add_argument('problem', nargs='?', default=default_pid.replace('/', ''))
+    parser.set_defaults(lang='cpp')
+    parser.add_argument('-py', dest='lang', action="store_const", const="py")
+    parser.add_argument('-java', dest='lang', action="store_const", const="java")
+
+    args = parser.parse_args()
+    problem = args.problem
+    lang = args.lang
+
+    path = './%s' % problem
+    print "%s has been created" % path
+    if problem == default_pid.replace('/', ''):
+        print defualt_problem_url
+    mkdir(path)
+    symlink("/Users/eggeek/Downloads", "%s/data" % path)
+    symlink("../support-files/run", "%s/run" % path)
+    filepath = '%s/%s.%s' % (path, args.problem, lang)
+
+    with open(filepath, "w") as f:
+        if lang == 'py':
+            template = open("/Users/eggeek/.vim/templates/acm.py").read()
+        elif lang == 'java':
+            template = gen_java_tmpl(problem)
+        else:
+            template = open("/Users/eggeek/.vim/templates/acm.cpp").read()
+        f.write(template)
+
+if __name__ == "__main__":
+    work()

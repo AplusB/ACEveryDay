@@ -1,21 +1,27 @@
 #!/usr/bin/env python
 # -*-: encoding: utf-8 -*-
+from tinydb import TinyDB, Query
 from shutil import rmtree, move
 import argparse
-parser = argparse.ArgumentParser()
-parser.add_argument("problem")
-args = parser.parse_args()
-pid = args.problem
+import re
 
-x = raw_input("Finish and delete [%s]? y/n" % pid)
 
-if x == 'y':
-    move('%s/%s.cpp' % (pid, pid), '../codeforces/%s.cpp' % pid)
-    rmtree(pid)
-    old_problems = open("support-files/problems", "r").readlines()
-    new_problems = [i for i in old_problems if i.split(",")[1].replace('/', '') != pid]
-    with open("support-files/problems", "w") as f:
-        for i in new_problems:
-            f.write(i)
+def work():
+    db = TinyDB('support-files/db.json')
+    parser = argparse.ArgumentParser()
+    parser.add_argument("problem")
+    args = parser.parse_args()
+    pid = args.problem
+    x = raw_input("Finish and delete [%s]? y/n" % pid)
+    if x != 'n':
+        move('%s/%s.cpp' % (pid, pid), '../codeforces/%s.cpp' % pid)
+        rmtree(pid)
+    if re.findall("^\d+", pid):
+        cid = int(re.findall("^\d+", pid)[0])
+        idx = pid[len(str(cid)):]
+        q = Query()
+        db.update({'isSolved': True}, (q.contestId == cid) & (q.index == idx))
+    print "Done!"
 
-print "Done!"
+if __name__ == "__main__":
+    work()
