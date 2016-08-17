@@ -10,7 +10,7 @@ def get_default_problem():
     p = Query()
     q1 = (p.solvedCount <= 2000) | (p.index == 'C')
     q2 = (p.isSolved == 0)
-    ps = db.search(q1 & q2)
+    ps = db.search((q1) & q2)
     ps.sort(key=lambda x: x['solvedCount'], reverse=True)
     return str(ps[0]['contestId']) + '/' + ps[0]['index']
 
@@ -24,7 +24,10 @@ def gen_java_tmpl(problem):
 def work():
     default_pid = get_default_problem()
     url_templet = "http://codeforces.com/problemset/problem/{name}"
+    contest_url_templet = "http://codeforces.com/contest/{cid}/problem/{index}"
     defualt_problem_url = url_templet.format(name=default_pid)
+    contest_url = contest_url_templet.format(cid=default_pid.split('/')[0],
+                                             index=default_pid.split('/')[1])
 
     parser = argparse.ArgumentParser(description="")
     parser.add_argument('problem', nargs='?', default=default_pid.replace('/', ''))
@@ -40,6 +43,7 @@ def work():
     print "%s has been created" % path
     if problem == default_pid.replace('/', ''):
         print defualt_problem_url
+        print contest_url
     mkdir(path)
     symlink("/Users/eggeek/Downloads", "%s/data" % path)
     symlink("../support-files/run", "%s/run" % path)
