@@ -12,7 +12,20 @@ def get_default_problem():
     q2 = (p.isSolved == 0)
     ps = db.search((q1) & q2)
     ps.sort(key=lambda x: x['solvedCount'], reverse=True)
-    return str(ps[0]['contestId']) + '/' + ps[0]['index']
+    pinfo = ps[0]
+    pinfo.pop('tags')
+    pinfo.pop('type')
+    pinfo.pop('isSolved')
+    url_templet = "http://codeforces.com/problemset/problem/{name}"
+    contest_url_templet = "http://codeforces.com/contest/{cid}/problem/{index}"
+    pid = str(ps[0]['contestId']) + '/' + ps[0]['index']
+    problem_url = url_templet.format(name=pid)
+    contest_url = contest_url_templet.format(cid=pinfo['contestId'],
+                                             index=pinfo['index'])
+    pinfo['problem_url'] = problem_url
+    pinfo['contest_url'] = contest_url
+    pinfo['pid'] = pid
+    return pinfo
 
 
 def gen_java_tmpl(problem):
@@ -22,13 +35,8 @@ def gen_java_tmpl(problem):
 
 
 def work():
-    default_pid = get_default_problem()
-    url_templet = "http://codeforces.com/problemset/problem/{name}"
-    contest_url_templet = "http://codeforces.com/contest/{cid}/problem/{index}"
-    defualt_problem_url = url_templet.format(name=default_pid)
-    contest_url = contest_url_templet.format(cid=default_pid.split('/')[0],
-                                             index=default_pid.split('/')[1])
-
+    pinfo = get_default_problem()
+    default_pid = pinfo['pid']
     parser = argparse.ArgumentParser(description="")
     parser.add_argument('problem', nargs='?', default=default_pid.replace('/', ''))
     parser.set_defaults(lang='cpp')
@@ -42,8 +50,9 @@ def work():
     path = './%s' % problem
     print "%s has been created" % path
     if problem == default_pid.replace('/', ''):
-        print defualt_problem_url
-        print contest_url
+        pinfo.pop('pid')
+        for k, v in pinfo.items():
+            print "%-15s:   %s" % (k, v)
     mkdir(path)
     symlink("/Users/eggeek/Downloads", "%s/data" % path)
     symlink("../support-files/run", "%s/run" % path)
