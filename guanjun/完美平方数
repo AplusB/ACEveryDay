@@ -1,0 +1,32 @@
+/* ***********************************************
+Author        :guanjun
+Created Time  :2016/8/31 17:17:39
+File Name     :1.cpp
+************************************************ */
+#include <iostream>
+#include <vector>
+#include <cmath>
+#include <string.h>
+using namespace std;
+int dp[1010];
+int n;
+int main()
+{
+    #ifndef ONLINE_JUDGE
+    //freopen("in.txt","r",stdin);
+    #endif
+    //freopen("out.txt","w",stdout);
+    while(cin>>n){
+		//dp[i]表示 组成i的最小完全平方数的个数
+		//那么 dp[i]=(dp[i],dp[i-j*j]+1)
+		//初始化 全是1组成的情况
+		for(int i=1;i<=n;i++)dp[i]=i;
+		for(int i=1;i<=n;i++){
+			for(int j=1;j*j<=i;j++){
+				dp[i]=min(dp[i],dp[i-j*j]+1);
+			}
+		}
+		cout<<dp[n]<<endl;
+	}
+    return 0;
+}
