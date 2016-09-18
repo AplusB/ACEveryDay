@@ -49,6 +49,6 @@ int QUE_or_UPD(int x,int y){
     }
     if(deep[x] < deep[y])
         swap(x,y);
-    return rev(ix) + QU(root,tid[y]/*+1 (Vertex weight)*/,tid[x]) + iy;
+    return rev(ix) + rev(QU(root,tid[y]/*+1 (Vertex weight)*/,tid[x])) + iy;
 }
 
