@@ -1,0 +1,68 @@
+/* ***********************************************
+Author        :guanjun
+Created Time  :2016/10/5 13:32:45
+File Name     :spojMBEEWALK.cpp
+************************************************ */
+#include <bits/stdc++.h>
+#define ull unsigned long long
+#define ll long long
+#define mod 90001
+#define INF 0x3f3f3f3f
+#define maxn 10010
+#define cle(a) memset(a,0,sizeof(a))
+const ull inf = 1LL << 61;
+const double eps=1e-5;
+using namespace std;
+priority_queue<int,vector<int>,greater<int> >pq;
+struct Node{
+	int x,y;
+};
+struct cmp{
+    bool operator()(Node a,Node b){
+        if(a.x==b.x) return a.y> b.y;
+        return a.x>b.x;
+	}
+};
+
+bool cmp(int a,int b){
+    return a>b;
+}
+ll dp[50][50][50];
+//第i步 到达位置 j k的方案数
+int dir[6][2]={
+	1,0,-1,0,0,1,0,-1,1,-1,-1,1
+};
+void init(){
+	cle(dp);
+	dp[0][15][15]=1;
+	for(int i=1;i<=15;i++){
+		for(int x=1;x<=30;x++){
+			for(int y=1;y<=30;y++){
+				for(int j=0;j<6;j++){
+					int nx=x+dir[j][0];
+					int ny=y+dir[j][1];
+						dp[i][x][y]+=dp[i-1][nx][ny];
+				}
+			}
+		}
+	}
+}
+
+int main()
+{
+    #ifndef ONLINE_JUDGE
+    //freopen("in.txt","r",stdin);
+    #endif
+    //freopen("out.txt","w",stdout);
+    int t,n;
+	init();
+	cin>>t;
+	while(t--){
+		cin>>n;
+		if(n==1)puts("0");
+		else{
+			cout<<dp[n][15][15]<<endl;
+		}
+	}
+    return 0;
+}
