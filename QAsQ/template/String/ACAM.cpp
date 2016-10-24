@@ -19,7 +19,7 @@ struct acam{
     void insert(char *arr,int id){
         int st = root;
         for(int i=0;arr[i];i++){
-            int & stx = nex[st][toid(arr[i])]; 
+            int & stx = nex[st][toid(arr[i])];
             if(stx == -1) stx = newNode();
             st = stx;
         }
@@ -35,6 +35,7 @@ struct acam{
                 fail[st] = root;
                 Q.push(st);
             }
+            else nex[root][i] = root;
         }
         while(Q.empty()==false){
             st = Q.front(),Q.pop();
@@ -43,7 +44,7 @@ struct acam{
                     int fst = fail[st],son = nex[st][i];
                     while(fst != root && nex[fst][i] == -1)
                         fst = fail[fst];
-                    fail[son] = nex[fst][i] == -1 ? root : nex[fst][i]; 
+                    fail[son] = nex[fst][i] == -1 ? root : nex[fst][i];
                     Q.push(son);
                 }
                 else{
