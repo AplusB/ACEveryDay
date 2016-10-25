@@ -40,4 +40,27 @@ struct Sam{
             extend(arr[i] - 'a');
         }
     }
+    void run(char *arr){
+        int st = root,lens = 0;
+        for(int i = 0;arr[i];i++){
+            int x = arr[i] - 'a';
+            if(nex[st][x] != -1){
+                st = nex[st][x];
+                lens++;
+            }
+            else{
+                while(st != -1 && nex[st][x] == -1)
+                    st = fa[st];
+                if(st == -1){
+                    st = root;
+                    lens = 0;
+                }
+                else{
+                    lens = len[st]+1;
+                    st = nex[st][x];
+                }
+            }
+            //update maxlen
+        }
+    }
 }SAM;
