@@ -21,11 +21,6 @@ int main()
                 f[a[j]-'0']=1;
             }
             int flag=1;
-            for(int j=v+1;j<=9;j++)
-                if(f[j]!=0)
-                {
-                    flag=0;break;
-                }
             if(flag)
             {
                 for(int j=0;j<=v;j++)
