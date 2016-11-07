@@ -15,7 +15,7 @@ martix operator * (const martix & A,const martix & B){
     ( C.num[i][j]+= A.num[i][k]*B.num[k][j]%MOD ) %=MOD ;
     return C;
 }
-martix pmod(martix x,int n)
+martix pmod(martix x,LL n)
 {
     martix res;
     res.to();
