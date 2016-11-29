@@ -4,6 +4,9 @@ from tinydb import TinyDB, Query
 from shutil import rmtree, move
 import argparse
 import re
+import json
+
+config = json.load(open("support-files/config.json", "r"))
 
 
 def work():
@@ -14,7 +17,7 @@ def work():
     pid = args.problem
     x = raw_input("Finish and delete [%s]? y/n" % pid)
     if x != 'n':
-        move('%s/%s.cpp' % (pid, pid), '../codeforces/%s.cpp' % pid)
+        move('%s/%s.cpp' % (pid, pid), '%s/%s.cpp' % (config['directory'], pid))
         rmtree(pid)
     if re.findall("^\d+", pid):
         cid = int(re.findall("^\d+", pid)[0])

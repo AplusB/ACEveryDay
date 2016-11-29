@@ -1,12 +1,15 @@
 #!/usr/bin/env python
 # -*- encoding: utf-8 -*-
+import json
 from collections import defaultdict
 from tinydb import TinyDB, Query
+
+config = json.load(open("config.json", "r"))
 
 
 def get_current_problem_set():
     import requests
-    url = "http://codeforces.com/api/problemset.problems"
+    url = config['api_problems']
     print "requesting..."
     resp = requests.get(url)
     if resp.status_code != 200:
@@ -72,7 +75,7 @@ def get_solved():
     from os.path import isfile
     from os import path
     import re
-    p = "/Users/eggeek/project/ACEveryDay/eggeek/codeforces"
+    p = config['directory']
     solved = [i.split('.')[0] for i in ls(p) if isfile(path.join(p, i))]
     solved = [re.sub("^\d+", re.findall("^\d+", i)[0] + '/', i) for i in solved]
     return solved
