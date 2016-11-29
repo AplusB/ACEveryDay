@@ -1,8 +1,11 @@
 #!/usr/bin/env python
-from tinydb import TinyDB, Query
+import requests
+import HTMLParser
 import argparse
 from os import mkdir, symlink
 from jinja2 import Template
+from pyquery.pyquery import PyQuery as pq
+from tinydb import TinyDB, Query
 
 
 def get_default_problem():
@@ -32,6 +35,36 @@ def gen_java_tmpl(problem):
     tmpl = Template(open("/Users/eggeek/.vim/templates/java.tmpl", "r").read())
     tmpl_str = tmpl.render(problem=problem)
     return tmpl_str
+
+
+def write_file(filename='', content=u''):
+    print "add sample: %s" % filename
+    with open(filename, "w") as f:
+        f.write(content)
+
+
+def escape(html=u""):
+    return html.replace(r"<br/>", "\n")
+
+
+def extract_sample(directory='', url=''):
+    r = requests.get(url)
+    raw_page = r.content
+    h = HTMLParser.HTMLParser()
+    html = h.unescape(raw_page.decode("utf-8"))
+    doc = pq(html)
+    in_no = 0
+    out_no = 0
+    tests = doc(".sample-test")
+    for i in tests.children():
+        if i.attrib['class'] == 'input':
+            case_in = pq(i)("pre").html()
+            write_file(filename="%s/%d.in" % (directory, in_no), content=escape(case_in))
+            in_no += 1
+        if i.attrib['class'] == 'output':
+            case_out = pq(i)("pre").html()
+            write_file(filename="%s/%d.out" % (directory, out_no), content=escape(case_out))
+            out_no += 1
 
 
 def work():
@@ -66,6 +99,7 @@ def work():
         else:
             template = open("/Users/eggeek/.vim/templates/acm.cpp").read()
         f.write(template)
+    extract_sample(directory=path, url=pinfo['contest_url'])
 
 if __name__ == "__main__":
     work()
