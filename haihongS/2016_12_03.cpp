@@ -48,7 +48,7 @@ int main()
 				f2[i] += 1;
 		}
 
-		int ok = 0;
+		int ok = -1;
 		for (int i = 0; i < len-1; i++)
 		{
 			if (f1[i]>0 && f2[i+1]>0)
@@ -56,7 +56,7 @@ int main()
 				ok = i; break;
 			}
 		}
-		if (ok == 0) printf("NO\n");
+		if (ok == -1) printf("NO\n");
 		else
 		{
 			printf("YES\n");
