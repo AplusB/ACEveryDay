@@ -85,10 +85,6 @@ def work():
 
     path = './%s' % problem
     print "%s has been created" % path
-    if problem == default_pid.replace('/', ''):
-        pinfo.pop('pid')
-        for k, v in pinfo.items():
-            print "%-15s:   %s" % (k, v)
     mkdir(path)
     symlink("../support-files/run", "%s/run" % path)
     filepath = '%s/%s.%s' % (path, args.problem, lang)
@@ -101,7 +97,12 @@ def work():
         else:
             template = open(config['cpp']).read()
         f.write(template)
-    extract_sample(directory=path, url=pinfo['contest_url'])
+
+    if problem == default_pid.replace('/', ''):
+        pinfo.pop('pid')
+        for k, v in pinfo.items():
+            print "%-15s:   %s" % (k, v)
+        extract_sample(directory=path, url=pinfo['contest_url'])
 
 if __name__ == "__main__":
     work()
