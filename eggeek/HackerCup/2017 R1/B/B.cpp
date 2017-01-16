@@ -43,6 +43,7 @@ int dx[] = {-1, 1, 0, 0};
 int dy[] = {0, 0, -1, 1};
 /*-----------------------------------*/
 #define N 55
+const ll inf = 1e9 + 1ll;
 ll n, r, x[N], y[N];
 bool used[N];
 
@@ -51,29 +52,9 @@ void read() {
   for (int i=0; i<n; i++) cin >> x[i] >> y[i];
 }
 
-vi find_zombies(ll X, ll Y, int c) {
-  ll x0, x1, y0, y1;
-  if (c == 0) {
-    x0 = X;
-    x1 = x0 + r;
-    y0 = Y;
-    y1 = y0 + r;
-  } else if (c == 1) {
-    x1 = X;
-    x0 = x1 - r;
-    y0 = Y;
-    y1 = y0 + r;
-  } else if (c == 2) {
-    x0 = X;
-    x1 = x0 + r;
-    y1 = Y;
-    y0 = y1 - r;
-  } else if (c == 3) {
-    x1 = X;
-    x0 = x1 - r;
-    y1 = Y;
-    y0 = y1 - r;
-  }
+vi find_zombies(ll X, ll Y) {
+  ll x0 = X, x1 = X + r;
+  ll y0 = Y, y1 = Y + r;
   vi res;
   for (int i=0; i<n; i++)
     if (!used[i] && x[i] >= x0 && x[i] <= x1 && y[i] >= y0 && y[i] <= y1) {
@@ -87,20 +68,20 @@ int solve() {
   read();
   int ans = 0;
   memset(used, false, sizeof(used));
-  for (int i=0; i<n; i++) {
-    for (int j=0; j<4; j++) {
-      vi z0 = find_zombies(x[i], y[i], j);
-      ans = max(ans, SZ(z0));
-      for (int k=0; k<n; k++) if (!used[k]) {
-        for (int l=0; l<4; l++) {
-          vi z1 = find_zombies(x[k], y[k], l);
-          ans = max(ans, SZ(z0) + SZ(z1));
-          for (int z: z1) used[z] = false;
-        }
-      }
-      for (int z: z0) used[z] = false;
+  set<ll> sx(x, x+n);
+  set<ll> sy(y, y+n);
+  for (ll i: sx) for (ll j: sy) {
+    vi z0 = find_zombies(i, j);
+    ans = max(ans, SZ(z0));
+    for (ll u: sx) for (ll v: sy) {
+      vi z1 = find_zombies(u, v);
+      ans = max(ans, SZ(z0) + SZ(z1));
+      for (int z: z1) used[z] = false;
     }
+    for (int z: z0) used[z] = false;
   }
+  assert(ans > 0);
+  assert(ans <= n);
   return ans;
 }
 

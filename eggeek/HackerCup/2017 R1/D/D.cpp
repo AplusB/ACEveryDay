@@ -44,7 +44,7 @@ int dy[] = {0, 0, -1, 1};
 /*-----------------------------------*/
 #define N 2002
 const ll mod = 1e9 + 7ll;
-ll n, m, r[N], a[N], b[2*N], totR;
+ll n, m, r[N], a[N], b[2*N], totR, inverse[N];
 
 ll inv(ll val) {
   ll t = mod - 2;
@@ -65,8 +65,8 @@ ll C(ll x, ll y) { // x > y
   assert(y < N);
   ll idx = x - m + 1 + totR;
   ll up = b[idx];
-  ll down = a[y];
-  return up * inv(down) % mod;
+  ll down = inverse[y];
+  return up * down % mod;
 }
 
 ll f(ll p, ll b) {
@@ -110,6 +110,7 @@ ll solve() {
 void init() {
   a[0] = 1;
   for (int i=1; i<N; i++) a[i] = a[i-1] * (ll)i % mod;
+  for (int i=1; i<N; i++) inverse[i] = inv(a[i]);
 }
 
 int main() {
