@@ -1,0 +1,104 @@
+#include <stdexcept>
+#include <iostream>
+#include <sstream>
+#include <fstream>
+#include <cassert>
+#include <cstring>
+#include <cstdarg>
+#include <cstdio>
+#include <random>
+#include <cmath>
+#include <ctime>
+#include <functional>
+#include <algorithm>
+#include <complex>
+#include <numeric>
+#include <limits>
+#include <bitset>
+#include <vector>
+#include <string>
+#include <queue>
+#include <deque>
+#include <array>
+#include <list>
+#include <map>
+#include <set>
+using namespace std;
+#define ALL(a) (a).begin(), (a).end()
+#define SZ(a) int((a).size())
+#define MP(x, y) make_pair((x),(y))
+#define FI first
+#define SE second
+#define LOWB(x) (x & (-x))
+#define UNIQUE(a) sort(ALL(a)), (a).erase(unique(ALL(a)), (a).end())
+#define HEIGHT(n) (sizeof(int) * 8 - __builtin_clz(n)) //height of range n segment tree
+#define INF 1e9
+#define INF_LL 4e18
+#define rep(i,a,b) for(__typeof(b) i=a; i<(b); ++i)
+typedef long long ll;
+typedef pair<int, int> pii;
+typedef pair<ll, ll> pll;
+typedef vector<int> vi;
+int dx[] = {-1, 1, 0, 0};
+int dy[] = {0, 0, -1, 1};
+/*-----------------------------------*/
+#define N 100010
+char ord[N], a[N], b[N];
+int lena, len, lenb;
+
+pii find_match() {
+  int ma = -1, mb = -1;
+  for (int i=0; i<len; i++) {
+    int j = 0;
+    bool fm = false;
+    while (j<lena && i+j<len) {
+      //printf("a[%d]:%c, ord[%d]:%c\n", j, a[j], i+j, ord[i+j]);
+      if (a[j] != ord[i+j]) {
+        fm = true;
+        break;
+      }
+      j++;
+    }
+    if (j==lena && !fm) {
+      ma = i;
+      break;
+    }
+  }
+  for (int i=len-lenb; i>=ma+lena; i--) {
+    int j = 0;
+    bool fm = false;
+    while (j<lenb && i+j<len) {
+      //printf("b[%d]:%c, ord[%d]:%c\n", j, b[j], i+j, ord[i+j]);
+      if (b[j] != ord[i+j]) {
+        fm = true;
+        break;
+      }
+      j++;
+    }
+    if (j==lenb && !fm) {
+      mb = i;
+      break;
+    }
+  }
+  //printf("ma:%d, mb:%d\n", ma, mb);
+  return {ma, mb};
+}
+
+string solve() {
+  lena = strlen(a), lenb = strlen(b), len = strlen(ord);
+  pii res = find_match();
+  reverse(ord, ord+len);
+  pii ires = find_match();
+  if (res.first == -1 || res.second == -1) {
+    if (ires.first == -1 || ires.second == -1) return "fantasy";
+    else return "backward";
+  }
+  else if (ires.first == -1 || ires.second == -1) return "forward";
+  else return "both";
+}
+
+int main() {
+  scanf("%s%s%s", ord, a, b);
+  cout << solve() << endl;
+  return 0;
+}
