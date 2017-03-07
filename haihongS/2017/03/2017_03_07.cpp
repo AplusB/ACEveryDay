@@ -26,28 +26,22 @@ int main()
 	{
 		for (int i = 0; i < n; i++)
 			scanf("%d", &a[i]);
-		b[n] = -1;
-		for (int i = n - 1; i >= 0; i--)
-			b[i] = max(b[i + 1], a[i]);
-		stack<int> aha;
+		priority_queue<int> aha;
 		while (!aha.empty()) aha.pop();
+		int flag = n;
 		for (int i = 0; i < n; i++)
 		{
-			if (a[i] == b[i])
+			aha.push(a[i]);
+			int ok = 0;
+			while (!aha.empty() && aha.top() == flag)
 			{
-				printf("%d", a[i]);
-				while (!aha.empty())
-				{
-					printf(" %d", aha.top());
-					aha.pop();
-				}
-				puts("");
+				flag--;
+				if (ok == 1) printf(" ");
+				ok = 1;
+				printf("%d", aha.top());
+				aha.pop();
 			}
-			else
-			{
-				aha.push(a[i]);
-				puts("");
-			}				
+			puts("");
 		}
 		
 	}
