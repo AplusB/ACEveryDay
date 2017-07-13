@@ -31,6 +31,7 @@ def get_default_problem():
     pinfo['problem_url'] = problem_url
     pinfo['contest_url'] = contest_url
     pinfo['pid'] = pid
+    pinfo['total problems'] = db.count((q1) & q2)
     return pinfo
 
 
