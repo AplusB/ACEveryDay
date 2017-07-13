@@ -14,7 +14,7 @@ config = json.load(open("support-files/config.json", "r"))
 def get_default_problem():
     db = TinyDB('support-files/db.json')
     p = Query()
-    q1 = (p.solvedCount <= 2000) | (p.index == 'C')
+    q1 = (p.solvedCount <= 3000) | (p.index >= 'C')
     q2 = (p.isSolved == 0)
     ps = db.search((q1) & q2)
     ps.sort(key=lambda x: x['solvedCount'], reverse=True)
