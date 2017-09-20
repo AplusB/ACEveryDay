@@ -1,6 +1,6 @@
 #!/bin/bash
 clear; clear
-g++ $1 -g -std=c++0x -Wall -Wconversion -Wshadow -o sol || exit
+g++ $1 -g -std=c++0x -Wall -Wconversion -Wshadow -I /usr/local/include -o sol || exit
 
 for i in *.in; do
     echo --- $i
